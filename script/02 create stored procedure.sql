@@ -46,10 +46,48 @@ where estados.id_estado=1 and b.region_beneficiario=depa;
 END |
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS `SP_Paquete_Finanzas_Insert`;
+DELIMITER |
+CREATE PROCEDURE `SP_Paquete_Finanzas_Insert`(in depa varchar(50), in usuario int, OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+    
+	BEGIN     -- ERROR
+		SET success = 0;
+	ROLLBACK;
+	END;
+ 
+	START TRANSACTION;
+	SET @usuario = Codigo_User(usuario);
+    insert into finanzas_paquete(observaciones, id_usuario) values ('', @usuario);
+    SET codigo_paquete := last_insert_id();
+    -- SET success = 1;
+    SET success = id_paquete;
+    COMMIT;
+END |
+DELIMITER ;
+
+
+/*********************************
+-- CREAR FUNCIONES
+*********************************/
+DROP FUNCTION IF EXISTS `Codigo_User`;
+DELIMITER |
+CREATE FUNCTION `Codigo_User`(usuario varchar(50)) RETURNS int(11)
+	NO SQL
+BEGIN
+	RETURN (SELECT id_usuario FROM usuarios where nombre_usuario = usuario);
+END |
+DELIMITER ;
+
 /*********************************
 -- PRUEBAS
 *********************************/
 
 CALL SP_Paquete_Finanzas('Arequipa');
+select Codigo_User('analista');
 
-
+SET @total = 0;
+call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
+select @total;

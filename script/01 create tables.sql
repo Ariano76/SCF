@@ -5,6 +5,7 @@ SHOW COLLATION WHERE Charset = 'utf8mb4';
 DESCRIBE finanzas_paquete_aprobacion;
 SHOW TABLE STATUS where name like 'finanzas_paquete_aprobacion';
 
+SELECT CURRENT_DATE();
 
 /*********************************
 -- ELIMINAR TABLAS 
@@ -19,9 +20,9 @@ DROP TABLE if exists finanzas_paquete;
 CREATE TABLE finanzas_paquete
 (
 	id_paquete           INTEGER NOT NULL AUTO_INCREMENT,
-	fecha                DATE NOT NULL,
+	fecha                DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP),
 	observaciones        VARCHAR(200) NULL,
-	estado               INTEGER NOT NULL,
+	estado               INTEGER NOT NULL DEFAULT 1,
 	id_usuario           INTEGER NOT NULL,
     PRIMARY KEY (id_paquete)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
