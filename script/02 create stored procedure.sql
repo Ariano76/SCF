@@ -22,12 +22,11 @@ BEGIN
      ELSE b.numero_cedula
 	END AS 'Numero de identificacion', b.documentos_fisico_original,    
     c.cual_es_su_numero_whatsapp, c.cual_es_su_numero_recibir_sms, c.cual_es_su_direccion, 
-    c.cuantos_viven_o_viajan_con_usted, 
     if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) +	if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
     if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
     if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
     if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
-	as '# de personas en la familia',
+	as 'numero de personas en la familia',
     c.tiene_los_siguientes_medios_comunicacion, c.como_accede_a_internet, 
     F_SINO(dersec.interesado_participar_nutricion) as interesado_participar_nutricion, 
     IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
@@ -52,4 +51,5 @@ DELIMITER ;
 *********************************/
 
 CALL SP_Paquete_Finanzas('Arequipa');
+
 
