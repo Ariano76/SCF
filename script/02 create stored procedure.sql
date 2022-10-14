@@ -49,7 +49,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `SP_Paquete_Finanzas_Insert`;
 DELIMITER |
-CREATE PROCEDURE `SP_Paquete_Finanzas_Insert`(in depa varchar(50), in usuario int, OUT success INT)
+CREATE PROCEDURE `SP_Paquete_Finanzas_Insert`(in depa varchar(50), in usuario varchar(50), OUT success INT)
 BEGIN
 	DECLARE exit handler for sqlexception
     
@@ -61,9 +61,16 @@ BEGIN
 	START TRANSACTION;
 	SET @usuario = Codigo_User(usuario);
     insert into finanzas_paquete(observaciones, id_usuario) values ('', @usuario);
-    SET codigo_paquete := last_insert_id();
-    -- SET success = 1;
-    SET success = id_paquete;
+    SET @codigo_paquete := last_insert_id();
+    
+    SELECT b.id_beneficiario
+	FROM beneficiario b inner join comunicacion c on b.id_beneficiario = c.id_beneficiario
+	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+	inner join estados on estados.id_estado = est.id_estado 
+	where estados.id_estado = 1 and b.region_beneficiario = 'AREQUIPA';
+    
+    SET success = 1;
+    -- SET success = @codigo_paquete;
     COMMIT;
 END |
 DELIMITER ;
@@ -86,8 +93,9 @@ DELIMITER ;
 *********************************/
 
 CALL SP_Paquete_Finanzas('Arequipa');
-select Codigo_User('analista');
+set @x = Codigo_User('analista');
+select @x;
 
-SET @total = 0;
-call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
-select @total;
+SET @success = 0;
+call SP_Paquete_Finanzas_Insert('arequipa','salvador',@success);
+select @success;
