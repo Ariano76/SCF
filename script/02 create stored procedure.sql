@@ -59,17 +59,28 @@ BEGIN
 	END;
  
 	START TRANSACTION;
-	SET @usuario = Codigo_User(usuario);
-    insert into finanzas_paquete(observaciones, id_usuario) values ('', @usuario);
-    SET @codigo_paquete := last_insert_id();
-    
-    SELECT b.id_beneficiario
-	FROM beneficiario b inner join comunicacion c on b.id_beneficiario = c.id_beneficiario
+    SET success = 2; -- CODIGO 2, NO EXISTEN REGISTROS PARA INSERTAR
+	
+    select @count_records := count(b.id_beneficiario) from beneficiario b 
 	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
-	where estados.id_estado = 1 and b.region_beneficiario = 'AREQUIPA';
+	where estados.id_estado = 1 and b.region_beneficiario = depa and 
+    b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
     
-    SET success = 1;
+    IF @count_records > 0 THEN
+		SET @usuario = Codigo_User(usuario);
+		insert into finanzas_paquete(observaciones, id_usuario) values (null, @usuario);
+		
+        SET @codigo_paquete := last_insert_id();
+      
+		insert into finanzas_paquete_detalle(id_paquete, id_beneficiario)  
+		SELECT @codigo_paquete, b.id_beneficiario FROM beneficiario b 
+		inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+		inner join estados on estados.id_estado = est.id_estado 
+		where estados.id_estado = 1 and b.region_beneficiario = depa and 
+		b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
+		SET success = 1; -- CODIGO 1, SE INSERTARON REGISTROS
+	END IF;
     -- SET success = @codigo_paquete;
     COMMIT;
 END |

@@ -41,7 +41,6 @@ CREATE TABLE finanzas_paquete_detalle
 (
 	id_paquete_detalle   INTEGER NOT NULL AUTO_INCREMENT,
 	id_paquete           INTEGER NOT NULL,
-	estado               INTEGER NOT NULL,
 	id_beneficiario      INTEGER NOT NULL,
     PRIMARY KEY (id_paquete_detalle)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
