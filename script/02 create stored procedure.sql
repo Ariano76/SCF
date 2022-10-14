@@ -35,14 +35,15 @@ BEGIN
     or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
     or c.como_accede_a_internet="Ninguna de las anteriores"),"Si","No") as bono_nutricion,
     b.id_beneficiario
-FROM beneficiario b inner join comunicacion c on b.id_beneficiario = c.id_beneficiario
-inner join educacion e on b.id_beneficiario = e.id_beneficiario
-inner join encuesta enc on b.id_beneficiario = enc.id_beneficiario 
-inner join derivacion_sectores dersec on b.id_beneficiario = dersec.id_beneficiario 
-inner join integrantes i on b.id_beneficiario = i.id_beneficiario 
-inner join estatus est on b.id_beneficiario = est.id_beneficiario 
-inner join estados on estados.id_estado = est.id_estado 
-where estados.id_estado=1 and b.region_beneficiario=depa;
+	FROM beneficiario b inner join comunicacion c on b.id_beneficiario = c.id_beneficiario
+	inner join educacion e on b.id_beneficiario = e.id_beneficiario
+	inner join encuesta enc on b.id_beneficiario = enc.id_beneficiario 
+	inner join derivacion_sectores dersec on b.id_beneficiario = dersec.id_beneficiario 
+	inner join integrantes i on b.id_beneficiario = i.id_beneficiario 
+	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+	inner join estados on estados.id_estado = est.id_estado 
+	where estados.id_estado=1 and b.region_beneficiario=depa and 
+    b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
 END |
 DELIMITER ;
 
@@ -86,6 +87,20 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_reporte_finanzas_regiones`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_finanzas_regiones`()
+BEGIN
+    select distinct(b.region_beneficiario) region
+    FROM beneficiario b inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+	inner join estados on estados.id_estado = est.id_estado 
+	where estados.id_estado = 1 and 
+	b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle) 
+    order by b.region_beneficiario;
+END |
+DELIMITER ;
+
+
 
 /*********************************
 -- CREAR FUNCIONES
@@ -109,7 +124,7 @@ DELIMITER ;
 -- PRUEBAS
 *********************************/
 
-CALL SP_Paquete_Finanzas('Arequipa');
+CALL SP_Paquete_Finanzas('la libertad');
 set @x = 0;
 set @x = Codigo_User('casa');
 select @x;
@@ -117,3 +132,5 @@ select @x;
 SET @success = 0;
 call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
 select @success;
+
+call SP_reporte_finanzas_regiones();
