@@ -67,8 +67,9 @@ BEGIN
 	where estados.id_estado = 1 and b.region_beneficiario = depa and 
     b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
     
-    IF @count_records > 0 THEN
-		SET @usuario = Codigo_User(usuario);
+    SET @usuario = Codigo_User(usuario);
+    
+    IF @count_records > 0 AND @usuario > 0 THEN
 		insert into finanzas_paquete(observaciones, id_usuario) values (null, @usuario);
 		
         SET @codigo_paquete := last_insert_id();
@@ -81,7 +82,6 @@ BEGIN
 		b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
 		SET success = 1; -- CODIGO 1, SE INSERTARON REGISTROS
 	END IF;
-    -- SET success = @codigo_paquete;
     COMMIT;
 END |
 DELIMITER ;
@@ -95,7 +95,13 @@ DELIMITER |
 CREATE FUNCTION `Codigo_User`(usuario varchar(50)) RETURNS int(11)
 	NO SQL
 BEGIN
-	RETURN (SELECT id_usuario FROM usuarios where nombre_usuario = usuario);
+	SET @usuario := (SELECT id_usuario FROM usuarios where nombre_usuario = usuario);
+    IF @usuario IS NULL THEN
+		RETURN 0; -- si no existe usuario devuelve 0
+	ELSE
+		RETURN (SELECT id_usuario FROM usuarios where nombre_usuario = usuario); 
+        -- si existe el usuario devolvera su codigo
+    END IF;
 END |
 DELIMITER ;
 
@@ -104,9 +110,10 @@ DELIMITER ;
 *********************************/
 
 CALL SP_Paquete_Finanzas('Arequipa');
-set @x = Codigo_User('analista');
+set @x = 0;
+set @x = Codigo_User('casa');
 select @x;
 
 SET @success = 0;
-call SP_Paquete_Finanzas_Insert('arequipa','salvador',@success);
+call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
 select @success;

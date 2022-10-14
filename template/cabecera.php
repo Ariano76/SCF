@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Sistema SCI</title>
+	<title>Sistema SCF</title>
 	
 	<!--link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -28,7 +28,7 @@
   	</style>  
 </head>
   	<body>
-  		<?php $url="http://".$_SERVER['HTTP_HOST']."/sci" ?>
+  		<?php $url="http://".$_SERVER['HTTP_HOST']."/scf" ?>
 
   		<!--nav class="navbar navbar-expand-md navbar-dark bg-primary"-->
   		<!--nav class="navbar navbar-expand-md navbar-light" style="background-color: #DA291C;"-->
@@ -78,7 +78,7 @@
   								<a class="dropdown-item" href="<?php echo $url."/repo_finanzas.php"?>">Finanzas</a>
   							</div>
   						</li>		
-  						<a class="nav-item nav-link" href="<?php echo $url."/administrador/index.php"?>" tabindex="-1" aria-disabled="true">Administrador</a>
+  						<a class="nav-item nav-link" href="<?php echo $url."/administrador/index.php"?>" tabindex="-1" aria-disabled="true">Ingresar al sistema</a>
   						<!--a class="nav-item nav-link" href="productos.php">Productos</a-->
   					</div>
   				</div>

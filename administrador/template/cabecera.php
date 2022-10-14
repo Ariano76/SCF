@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function(){
 </head>
 <body>
 
-	<?php $url="http://".$_SERVER['HTTP_HOST']."/sci" ?>
+	<?php $url="http://".$_SERVER['HTTP_HOST']."/scf" ?>
 	<?php 
 	if ($_SESSION['rolusuario']==1) { // ROL ADMINISTRADOR
 		?>
