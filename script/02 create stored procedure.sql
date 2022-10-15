@@ -81,6 +81,11 @@ BEGIN
 		inner join estados on estados.id_estado = est.id_estado 
 		where estados.id_estado = 1 and b.region_beneficiario = depa and 
 		b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
+        
+        /* estado = 2 (pendiente) */
+        insert into finanzas_paquete_aprobacion(id_paquete, id_estado, id_usuario_envio) 
+        values(@codigo_paquete, 2, @usuario);
+        
 		SET success = 1; -- CODIGO 1, SE INSERTARON REGISTROS
 	END IF;
     COMMIT;
