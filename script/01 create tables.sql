@@ -14,8 +14,6 @@ DROP TABLE if exists finanzas_paquete_detalle;
 DROP TABLE if exists finanzas_proveedor_pago;
 DROP TABLE if exists finanzas_paquete_aprobacion;
 DROP TABLE if exists finanzas_paquete;
-DROP TABLE if exists finanzas_usuarios;
-DROP TABLE if exists finanzas_roles;
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
@@ -30,11 +28,12 @@ CREATE TABLE finanzas_paquete (
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE finanzas_paquete_aprobacion (
-	id_paquete_aprobacion INTEGER NOT NULL AUTO_INCREMENT,
-	id_paquete           INTEGER NOT NULL,
-	estado               INTEGER NOT NULL,
-	fecha                DATE NOT NULL,
-	id_usuario           INTEGER NOT NULL,
+	id_paquete_aprobacion	INTEGER NOT NULL AUTO_INCREMENT,
+	id_paquete				INTEGER NOT NULL,
+	estado					INTEGER NOT NULL,
+	fecha					DATE NOT NULL,
+	id_usuario_envio		INTEGER NULL,
+    id_usuario_aprobacion	INTEGER NULL,
     PRIMARY KEY (id_paquete_aprobacion)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -54,33 +53,22 @@ CREATE TABLE finanzas_proveedor_pago (
     PRIMARY KEY (id_proveedor_pago)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-CREATE TABLE finanzas_usuarios (	
-	id_usuario		INTEGER NOT NULL AUTO_INCREMENT,
-	nombre_usuario	VARCHAR(50) NOT NULL,
-    correo 			VARCHAR(100) NOT NULL,
-	contrasenia	    VARCHAR(50) NOT NULL,
-    id_rol          INTEGER NOT NULL,
-	id_estado       INTEGER NOT NULL,
-    PRIMARY KEY (id_usuario)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
-CREATE TABLE finanzas_roles (	
-	id_rol          INTEGER NOT NULL AUTO_INCREMENT,
-	nombre_rol     	VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id_rol)
-) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
 *********************************/
 ALTER TABLE finanzas_paquete_aprobacion ADD FOREIGN KEY R_4 (id_paquete) REFERENCES finanzas_paquete (id_paquete);
-ALTER TABLE finanzas_paquete_aprobacion ADD FOREIGN KEY R_2 (id_usuario) REFERENCES finanzas_usuarios (id_usuario);
+ALTER TABLE finanzas_paquete_aprobacion ADD FOREIGN KEY R_2 (id_usuario_envio) REFERENCES usuarios (id_usuario);
+ALTER TABLE finanzas_paquete_aprobacion ADD FOREIGN KEY R_7 (id_usuario_aprobacion) REFERENCES usuarios (id_usuario);
 
 ALTER TABLE finanzas_paquete ADD FOREIGN KEY R_1 (id_usuario) REFERENCES usuarios (id_usuario);
 ALTER TABLE finanzas_paquete_detalle ADD FOREIGN KEY R_3 (id_paquete) REFERENCES finanzas_paquete (id_paquete);
 
 ALTER TABLE finanzas_proveedor_pago ADD FOREIGN KEY R_6 (id_paquete_aprobacion) REFERENCES finanzas_paquete_aprobacion (id_paquete_aprobacion);
-ALTER TABLE finanzas_proveedor_pago ADD FOREIGN KEY R_5 (id_usuario) REFERENCES finanzas_usuarios (id_usuario);
+ALTER TABLE finanzas_proveedor_pago ADD FOREIGN KEY R_5 (id_usuario) REFERENCES usuarios (id_usuario);
 
-ALTER TABLE finanzas_usuarios ADD FOREIGN KEY R_7 (id_rol) REFERENCES finanzas_roles (id_rol);
+/*ALTER TABLE finanzas_usuarios ADD FOREIGN KEY R_7 (id_rol) REFERENCES finanzas_roles (id_rol);
 ALTER TABLE finanzas_usuarios ADD CONSTRAINT UC_finanzas_usuarios UNIQUE (nombre_usuario);
+*/
+
