@@ -145,11 +145,10 @@ DELIMITER ;
 /*********************************
 -- CREAR VISTAS
 *********************************/
-DROP VIEW IF EXISTS vista_finanzas_enviados_consulta;
-CREATE VIEW `vista_finanzas_enviados_consulta` AS
-	select fp.id_paquete as id_paquete,  fe1.estado as estado, fp.fecha as 'fecha_envio', 
-    usu.nombre_usuario as nombre_usuario, fe2.estado as 'estado_aprobacion', 
-    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+DROP VIEW IF EXISTS vista_finanzas_consulta;
+CREATE VIEW `vista_finanzas_consulta` AS
+	select fp.id_paquete,  fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
+    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
 	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
 	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
 	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
@@ -174,7 +173,5 @@ call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
 select @success;
 
 call SP_reporte_finanzas_regiones();
-SELECT * FROM vista_finanzas_enviados_consulta ;
-
-SELECT * FROM vista_finanzas_enviados_consulta WHERE id_paquete=5 LIMIT 1;
-SELECT * FROM vista_general;
+SELECT * FROM vista_finanzas_consulta ;
+SELECT * FROM vista_estatus;

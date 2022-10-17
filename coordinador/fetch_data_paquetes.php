@@ -1,7 +1,7 @@
 <?php include("../administrador/config/connection.php");
 
 $output= array();
-$sql = "SELECT * FROM vista_finanzas_enviados_consulta";
+$sql = "SELECT * FROM vista_finanzas_consulta";
 
 $totalQuery = mysqli_query($con,$sql);
 $total_all_rows = mysqli_num_rows($totalQuery);
@@ -19,10 +19,9 @@ if(isset($_POST['search']['value']))
 {
 	$search_value = $_POST['search']['value'];
 	$sql .= " WHERE estado like '%".$search_value."%'";
-	$sql .= " OR fecha_envio like '%".$search_value."%'";
 	$sql .= " OR nombre_usuario like '%".$search_value."%'";
+	$sql .= " OR fecha_envio like '%".$search_value."%'";
 	$sql .= " OR estado_aprobacion like '%".$search_value."%'";
-	$sql .= " OR numero_beneficiarios like '%".$search_value."%'";
 }
 
 if(isset($_POST['order']))
@@ -33,7 +32,7 @@ if(isset($_POST['order']))
 }
 else
 {
-	$sql .= " ORDER BY id_paquete asc";
+	$sql .= " ORDER BY fecha_envio desc";
 }
 
 if($_POST['length'] != -1)
@@ -42,7 +41,7 @@ if($_POST['length'] != -1)
 	$length = $_POST['length'];
 	$sql .= " LIMIT  ".$start.", ".$length;
 }	
-echo "<script>console.log('Console: " . $sql . "' );</script>"; 
+
 $query = mysqli_query($con,$sql);
 $count_rows = mysqli_num_rows($query);
 $data = array();

@@ -34,8 +34,8 @@ include("../administrador/config/connection.php");
       'paging': 'true',
       'order': [],
       'ajax': {
-        'url': 'fetch_data_paquetes_aprobacion.php',
-        'type': 'post',
+        'url': 'fetch_data_paquetes.php',
+        'type': 'POST'
       },
       "aoColumnDefs": [{
         "bSortable": false,
@@ -44,8 +44,6 @@ include("../administrador/config/connection.php");
       ]
     });
   });
-
-  
   $(document).on('submit', '#updateUser', function(e) {
     e.preventDefault();
       //var tr = $(this).closest('tr');
@@ -59,7 +57,7 @@ include("../administrador/config/connection.php");
       var id = $('#id').val();
       
       $.ajax({
-        url: "update_user_paquetes_aprobacion.php",
+        url: "update_user_paquetes.php",
         type: "post",
         data: {
           estado: estado,
@@ -93,7 +91,7 @@ include("../administrador/config/connection.php");
       $('#exampleModal').modal('show');
 
       $.ajax({
-        url: "get_single_paquetes_aprobacion.php",
+        url: "get_single_paquetes.php",
         data: {
           id: id
         },
@@ -105,7 +103,6 @@ include("../administrador/config/connection.php");
           $('#nombre_usuarioField').val(json.nombre_usuario);
           $('#estado_aprobacionField').val(json.estado_aprobacion);
           $('#numero_beneficiariosField').val(json.numero_beneficiarios);
-
           $('#id').val(id);
           $('#trid').val(trid);
           //console.log("La Respuesta esta_de_acuerdoField es :" + json.esta_de_acuerdo);
@@ -144,7 +141,7 @@ include("../administrador/config/connection.php");
             <div class="mb-3 row">
               <label for="nombre_usuarioField" class="col-md-3 form-label">Usuario de envío</label>
               <div class="col-md-9">
-                <textarea name="text" id="nombre_usuarioField" rows="3" cols="70" maxlength="250"></textarea>
+                <input type="text" class="form-control" id="nombre_usuarioField" name="name" disabled>
               </div>
             </div>            
             <div class="mb-3 row">
