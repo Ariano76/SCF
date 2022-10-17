@@ -105,6 +105,22 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_paquete_finanzas_enviados_consulta`;
+DELIMITER |
+CREATE PROCEDURE `SP_paquete_finanzas_enviados_consulta`()
+BEGIN
+    select fp.id_paquete, fp.fecha as 'fecha_envio' , fp.id_estado, fe1.estado, fpa.id_estado, 
+    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
+	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+	group by fp.id_paquete, fp.fecha, fp.id_estado, fe1.estado, fpa.id_estado, fe2.estado;
+END |
+DELIMITER ;
+
+
+
 
 
 /*********************************
@@ -130,6 +146,7 @@ DELIMITER ;
 *********************************/
 
 CALL SP_Paquete_Finanzas('la libertad');
+call SP_paquete_finanzas_enviados_consulta();
 set @x = 0;
 set @x = Codigo_User('casa');
 select @x;
