@@ -18,8 +18,6 @@
 	<!-- configuracion tabla  -->
 	<script src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
-
-
 </body>
 </html>
 <script type="text/javascript">

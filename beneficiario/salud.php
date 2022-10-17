@@ -94,6 +94,7 @@ include("../administrador/config/connection.php");
               table = $('#tablaUsuarios').DataTable();
               var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
               var row = table.row("[id='" + trid + "']");
+              
               row.row("[id='" + trid + "']").data([id, nombre,  numero_cedula, algun_miembro_tiene_discapacidad, algun_miembro_tiene_problemas_salud, derivacion_salud, derivacion_proteccion, button]);
               $('#exampleModal').modal('hide');
             } else {

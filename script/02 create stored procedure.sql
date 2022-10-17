@@ -173,4 +173,7 @@ call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
 select @success;
 
 call SP_reporte_finanzas_regiones();
+SELECT * FROM vista_finanzas_enviados_consulta ;
+
+SELECT * FROM vista_finanzas_enviados_consulta WHERE id_paquete=5 LIMIT 1;
 SELECT * FROM vista_finanzas_enviados_consulta;
