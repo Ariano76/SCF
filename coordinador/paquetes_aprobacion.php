@@ -45,6 +45,7 @@ include("../administrador/config/connection.php");
     });
   });
 
+  
   $(document).on('submit', '#updateUser', function(e) {
     e.preventDefault();
       //var tr = $(this).closest('tr');

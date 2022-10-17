@@ -1,14 +1,15 @@
 <?php 
 include('../administrador/config/connection.php');
-$nombre = $_POST['nombre'];
-$numero_cedula = $_POST['numero_cedula'];
-$observaciones = $_POST['observaciones'];
-$id_estado = $_POST['id_estado'];
+$estado = $_POST['estado'];
+$fecha_envio = $_POST['fecha_envio'];
+$nombre_usuario = $_POST['nombre_usuario'];
+$estado_aprobacion = $_POST['estado_aprobacion'];
+$numero_beneficiarios = $_POST['numero_beneficiarios'];
 
 $id = $_POST['id'];
 
-$sql = "UPDATE `estatus` SET  `observaciones`= '$observaciones', `id_estado`='$id_estado'
-   WHERE id_beneficiario='$id' ";
+$sql = "UPDATE `finanzas_paquete_aprobacion` SET  `id_estado`='$estado_aprobacion'
+   WHERE id_paquete='$id' ";
 
 $query= mysqli_query($con,$sql);
 $lastId = mysqli_insert_id($con);

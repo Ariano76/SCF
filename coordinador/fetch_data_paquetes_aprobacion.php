@@ -42,7 +42,7 @@ if($_POST['length'] != -1)
 	$length = $_POST['length'];
 	$sql .= " LIMIT  ".$start.", ".$length;
 }	
-
+echo "<script>console.log('Console: " . $sql . "' );</script>"; 
 $query = mysqli_query($con,$sql);
 $count_rows = mysqli_num_rows($query);
 $data = array();
