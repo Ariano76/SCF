@@ -10,11 +10,12 @@ SELECT CURRENT_DATE();
 /*********************************
 -- ELIMINAR TABLAS 
 *********************************/
-DROP TABLE if exists finanzas_estados;
+
 DROP TABLE if exists finanzas_paquete_detalle;
 DROP TABLE if exists finanzas_proveedor_pago;
 DROP TABLE if exists finanzas_paquete_aprobacion;
 DROP TABLE if exists finanzas_paquete;
+DROP TABLE if exists finanzas_estados;
 
 /*********************************
 -- CREACION DE TABLAS 
@@ -23,7 +24,6 @@ DROP TABLE if exists finanzas_paquete;
 CREATE TABLE finanzas_paquete (
 	id_paquete		INTEGER NOT NULL AUTO_INCREMENT,
 	fecha			DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP),
-	observaciones	VARCHAR(200) NULL,
 	id_estado		INTEGER NOT NULL DEFAULT 1,
 	id_usuario		INTEGER NOT NULL,
     PRIMARY KEY (id_paquete)
@@ -33,7 +33,8 @@ CREATE TABLE finanzas_paquete_aprobacion (
 	id_paquete_aprobacion	INTEGER NOT NULL AUTO_INCREMENT,
 	id_paquete				INTEGER NOT NULL,
 	id_estado				INTEGER NOT NULL,
-	fecha					DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP),
+	fecha_aprobacion		DATETIME NOT NULL,
+    observaciones			VARCHAR(200) NULL,
 	id_usuario_envio		INTEGER NULL,
     id_usuario_aprobacion	INTEGER NULL,
     PRIMARY KEY (id_paquete_aprobacion)

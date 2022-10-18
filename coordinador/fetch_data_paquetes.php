@@ -1,7 +1,7 @@
 <?php include("../administrador/config/connection.php");
 
 $output= array();
-$sql = "SELECT * FROM vista_finanzas_consulta";
+$sql = "SELECT * FROM vista_finanzas_consulta_aprobacion";
 
 $totalQuery = mysqli_query($con,$sql);
 $total_all_rows = mysqli_num_rows($totalQuery);
@@ -12,7 +12,8 @@ $columns = array(
 	2 => 'fecha_envio',
 	3 => 'nombre_usuario',
 	4 => 'estado_aprobacion',
-	5 => 'numero_beneficiarios',
+	5 => 'fecha_aprobacion',
+	6 => 'numero_beneficiarios',
 );
 
 if(isset($_POST['search']['value']))
@@ -53,6 +54,7 @@ while($row = mysqli_fetch_assoc($query))
 	$sub_array[] = $row['fecha_envio'];
 	$sub_array[] = $row['nombre_usuario'];
 	$sub_array[] = $row['estado_aprobacion'];
+	$sub_array[] = $row['fecha_aprobacion'];
 	$sub_array[] = $row['numero_beneficiarios'];
 	
 	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm editbtn" >Edit</a>';
