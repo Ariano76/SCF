@@ -134,10 +134,27 @@ include("../administrador/config/connection.php");
     });
 
   </script>
+
+  <script type="text/javascript">
+    //escribir la hora actual en una caja de texto, segundo a segundo.
+    $(document).ready(function() {
+     setInterval(runningTime, 1000);
+   });
+    function runningTime() {
+      $.ajax({
+        url: 'timeScript.php',
+        success: function(data) {
+         $('#fecha_aprobacionField').val(data);
+       },
+     });
+    }
+  </script>
+
   <!-- Modal -->
   <!--div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"-->
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <!--div class="modal-dialog" role="document"-->
+
     <div class="modal-dialog modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -148,7 +165,7 @@ include("../administrador/config/connection.php");
           <form id="updateUser">
             <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="trid" id="trid" value="">
-            
+
             <div class="mb-3 row">
               <label for="estadoField" class="col-md-4 form-label">Estado de envío</label>
               <div class="col-md-8">
@@ -188,7 +205,6 @@ include("../administrador/config/connection.php");
             <div class="mb-3 row">
               <label for="estado_aprobacionField" class="col-md-4 form-label">Estado Aprobación</label>
               <div class="col-md-8">
-                <input type="text" class="form-control" id="estado_aprobacionField" name="name" disabled>
                 <div class="custom-control custom-radio">
                   <input type="radio" id="id_estadoField1" name="estatus" class="custom-control-input" value="2">
                   <label class="custom-control-label" for="customRadio1">Pendiente</label>
@@ -215,6 +231,7 @@ include("../administrador/config/connection.php");
       </div>
     </div>
   </div>
+
 
 
   <?php include("../administrador/template/pie.php"); ?>

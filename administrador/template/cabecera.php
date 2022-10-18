@@ -139,7 +139,9 @@ document.addEventListener("DOMContentLoaded", function(){
 	// DOMContentLoaded  end
 </script>
 
+ 
 </head>
+
 <body>
 
 	<?php $url="http://".$_SERVER['HTTP_HOST']."/scf" ?>
