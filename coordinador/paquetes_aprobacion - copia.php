@@ -19,7 +19,6 @@ include("../administrador/config/connection.php");
         <th>Beneficiarios</th>
         <th>&nbsp;&nbsp;Observaciones&nbsp;&nbsp;&nbsp;</th>
         <th>Acción</th>
-        <th>Download</th>
       </tr>
     </thead>
   </table>   
@@ -42,7 +41,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [9]
+        "aTargets": [8]
       },
       ]
     });
@@ -83,7 +82,6 @@ include("../administrador/config/connection.php");
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
-            /*var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Download</a> </td>';*/
             var row = table.row("[id='" + trid + "']");
 
             var nomEst;
@@ -95,7 +93,7 @@ include("../administrador/config/connection.php");
               nomEst = 'Rechazado'
             }
 
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios,  observaciones, button, button1]);
+            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios,  observaciones, button]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
