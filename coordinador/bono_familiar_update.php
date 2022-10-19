@@ -1,14 +1,11 @@
 <?php 
 include('../administrador/config/connection.php');
-$id_estado = $_POST['id_estado'];
-$observaciones = $_POST['observaciones'];
+$asignacion = $_POST['asignacion'];
 
 $id = $_POST['id'];
 
-date_default_timezone_set('America/Lima');
-$fechaActual = date('Y-m-d H:i:s');
-
-$sql = "UPDATE `finanzas_paquete_aprobacion` SET `id_estado`='$id_estado', `fecha_aprobacion`='$fechaActual', `observaciones`='$observaciones' WHERE id_paquete='$id' ";
+$sql = "UPDATE `finanzas_bono_familiar` SET  `asignacion`= '$asignacion' 
+WHERE id_familiar='$id' ";
 
 $query= mysqli_query($con,$sql);
 $lastId = mysqli_insert_id($con);

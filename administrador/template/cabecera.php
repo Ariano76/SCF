@@ -21,59 +21,56 @@ if (!isset($_SESSION['usuario'])) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Administración SCF</title>
 
+	<!-- Bootstrap CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+
 	<!-- jQuery -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<!-- DataTables CSS -->
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">  
-	<!-- DataTables JS -->
-  	<!--script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js">
-  	</script-->
 
-  	<!-- libreria para utilizar iconos en nuestras paginas  -->
-  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">  	
+	<!-- libreria para utilizar iconos en nuestras paginas  -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-  	
-  	<!-- tabla reportes -->
-  	<style>
-  		table.dataTable thead {background: linear-gradient(to right, #0575E6, #0575E6);
-  			color:white;}
-  			.success {
-  				background: #c7efd9;
-  				border: #bbe2cd 1px solid;
-  			}
-  			.error {
-  				background: #fbcfcf;
-  				border: #f3c6c7 1px solid;
-  			}
-  			.firma {
-  				background: #FFF3CD;
-  				border: #f3c6c7 1px solid;
-  			}
-  			div#response.display-block {
-  				display: block;
-  			}
-  			/* ============ desktop view ============ */
-  			@media all and (min-width: 992px) {
+	<!-- tabla reportes -->
+	<style>
+		table.dataTable thead {background: linear-gradient(to right, #0575E6, #0575E6);
+			color:white;}
+			.success {
+				background: #c7efd9;
+				border: #bbe2cd 1px solid;
+			}
+			.error {
+				background: #fbcfcf;
+				border: #f3c6c7 1px solid;
+			}
+			.firma {
+				background: #FFF3CD;
+				border: #f3c6c7 1px solid;
+			}
+			div#response.display-block {
+				display: block;
+			}
+			/* ============ desktop view ============ */
+			@media all and (min-width: 992px) {
 
-  				.dropdown-menu li{
-  					position: relative;
-  				}
-  				.dropdown-menu .submenu{ 
-  					display: none;
-  					position: absolute;
-  					left:100%; top:-7px;
-  				}
-  				.dropdown-menu .submenu-left{ 
-  					right:100%; left:auto;
-  				}
+				.dropdown-menu li{
+					position: relative;
+				}
+				.dropdown-menu .submenu{ 
+					display: none;
+					position: absolute;
+					left:100%; top:-7px;
+				}
+				.dropdown-menu .submenu-left{ 
+					right:100%; left:auto;
+				}
 
-  				.dropdown-menu > li:hover{ background-color: #f1f1f1 }
-  				.dropdown-menu > li:hover > .submenu{
-  					display: block;
-  				}
-  			}	
+				.dropdown-menu > li:hover{ background-color: #f1f1f1 }
+				.dropdown-menu > li:hover > .submenu{
+					display: block;
+				}
+			}	
 /* ============ desktop view .end// ============ */
 
 /* ============ small devices ============ */
@@ -129,7 +126,6 @@ document.addEventListener("DOMContentLoaded", function(){
 				  		} else {
 				  			nextEl.style.display = 'block';
 				  		}
-
 				  	}
 				  });
 			})
@@ -139,14 +135,13 @@ document.addEventListener("DOMContentLoaded", function(){
 	// DOMContentLoaded  end
 </script>
 
- 
 </head>
 
 <body>
 
 	<?php $url="http://".$_SERVER['HTTP_HOST']."/scf" ?>
 	<?php 
-	if ($_SESSION['rolusuario']==4) { // ANALISTA FINANZAS
+	if ($_SESSION['rolusuario']==4) { // COORDINADOR FINANZAS
 		?>
 		<!--nav class="navbar navbar-expand-md navbar-dark bg-primary"-->
 		<nav class="navbar navbar-expand-md navbar-light bg-white border border-dark">
@@ -163,21 +158,17 @@ document.addEventListener("DOMContentLoaded", function(){
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tareas</a>
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="<?php echo $url."/coordinador/paquetes_aprobacion.php"?>">Aprobar paquetes</a>
-								<a class="dropdown-item" href="<?php echo $url."/validacion.php"?>">Limpieza de datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/coordinador/bono_conectividad.php"?>">Limpieza de datos</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/repo_validacion_dni.php"?>">Documentos con incidencias</a>
+								<a class="dropdown-item" href="<?php echo $url."/repo_validacion_dni.php"?>">Documentos</a>
 							</div>
 						</li>
 						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data Historica</a>
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Bonos</a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/coordinador/paquetes_aprobacion.php"?>">Cargar bases internas</a>
-								<a class="dropdown-item" href="<?php echo $url."/validacionDH.php"?>">Limpieza de datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/coordinador/bono_conectividad.php"?>">Conectividad</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/repo_validacionDH_dni.php"?>">Documentos con incidencias</a>
-								<a class="dropdown-item" href="<?php echo $url."/repo_validacionDH_nombres.php"?>">Nombres con incidencias</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/cotejo_beneficiarios.php"?>">Cotejar Nuevos Datos Historicos</a>
+								<a class="dropdown-item" href="<?php echo $url."/coordinador/bono_familiar.php"?>">Familiar</a>
 							</div>
 						</li>			
 						<li>
@@ -203,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			</div>
 		</nav>
 		<?php 
-	} elseif($_SESSION['rolusuario']==5) { // COORDINADOR FINANZAS
+	} elseif($_SESSION['rolusuario']==5) { // ANALISTA FINANZAS
 		?>
 		<nav class="navbar navbar-expand-md navbar-light bg-white border border-dark">
 			<div class="container-fluid">		

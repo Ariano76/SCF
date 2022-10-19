@@ -16,6 +16,8 @@ DROP TABLE if exists finanzas_proveedor_pago;
 DROP TABLE if exists finanzas_paquete_aprobacion;
 DROP TABLE if exists finanzas_paquete;
 DROP TABLE if exists finanzas_estados;
+DROP TABLE if exists finanzas_bono_conectividad;
+DROP TABLE if exists finanzas_bono_familiar;
 
 /*********************************
 -- CREACION DE TABLAS 
@@ -62,6 +64,20 @@ CREATE TABLE finanzas_estados
     PRIMARY KEY (id_estado)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
+CREATE TABLE finanzas_bono_conectividad
+(	id_conectividad	INTEGER NOT NULL AUTO_INCREMENT,
+	asignacion		decimal(5,2) NOT NULL,
+    PRIMARY KEY (id_conectividad)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_bono_familiar
+(	id_familiar		INTEGER NOT NULL AUTO_INCREMENT,
+	asignacion		decimal(6,2) NOT NULL,
+    PRIMARY KEY (id_familiar)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+
+
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
@@ -89,4 +105,8 @@ insert into finanzas_estados (estado) values ('Enviado');
 insert into finanzas_estados (estado) values ('Pendiente');
 insert into finanzas_estados (estado) values ('Aprobado');
 insert into finanzas_estados (estado) values ('Rechazado');
+
+insert into finanzas_bono_conectividad (asignacion) values (120.50);
+
+insert into finanzas_bono_familiar (asignacion) values (300.50),(500.50),(900.50),(1300.50),(5300.50),(9300.50);
 

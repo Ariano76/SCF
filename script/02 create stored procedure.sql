@@ -105,19 +105,7 @@ BEGIN
 END |
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `SP_paquete_finanzas_enviados_consulta`;
-DELIMITER |
-CREATE PROCEDURE `SP_paquete_finanzas_enviados_consulta`()
-BEGIN
-    select fp.id_paquete,  fe1.estado, fp.fecha as 'fecha_envio' ,
-    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
-	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-	group by fp.id_paquete, fp.fecha, fp.id_estado, fe1.estado, fpa.id_estado, fe2.estado;
-END |
-DELIMITER ;
+
 
 
 
@@ -160,17 +148,29 @@ DELIMITER ;
 DROP VIEW IF EXISTS vista_finanzas_consulta_aprobacion;
 CREATE VIEW `vista_finanzas_consulta_aprobacion` AS
 	select fp.id_paquete, fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
-    fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion,
+    fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, fpa.observaciones, 
     count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
 	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
 	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
     inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
 	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
     inner join usuarios as usu on fp.id_usuario = usu.id_usuario
-	group by fp.id_paquete, fe1.estado, fp.fecha, usu.nombre_usuario, fe2.estado, fpa.fecha_aprobacion;
+	group by fp.id_paquete,fe1.estado,fp.fecha,usu.nombre_usuario,fe2.estado,fpa.fecha_aprobacion,fpa.observaciones;
 DELIMITER ;
 
+drop view IF EXISTS vista_finanzas_bono_conectividad;
+CREATE VIEW `vista_finanzas_bono_conectividad` AS
+	SELECT id_conectividad, asignacion
+    FROM finanzas_bono_conectividad;
+DELIMITER ;
 
+drop view IF EXISTS vista_finanzas_bono_familiar;
+CREATE VIEW `vista_finanzas_bono_familiar` AS
+	SELECT id_familiar, asignacion
+    FROM finanzas_bono_familiar;
+DELIMITER ;
+
+select * from vista_finanzas_bono_conectividad;
 /*********************************
 -- PRUEBAS
 *********************************/

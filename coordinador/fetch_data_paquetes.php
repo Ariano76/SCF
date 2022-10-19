@@ -14,6 +14,7 @@ $columns = array(
 	4 => 'estado_aprobacion',
 	5 => 'fecha_aprobacion',
 	6 => 'numero_beneficiarios',
+	7 => 'observaciones',
 );
 
 if(isset($_POST['search']['value']))
@@ -56,6 +57,7 @@ while($row = mysqli_fetch_assoc($query))
 	$sub_array[] = $row['estado_aprobacion'];
 	$sub_array[] = $row['fecha_aprobacion'];
 	$sub_array[] = $row['numero_beneficiarios'];
+	$sub_array[] = $row['observaciones'];
 	
 	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm editbtn" >Edit</a>';
 	$data[] = $sub_array;

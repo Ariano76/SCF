@@ -10,13 +10,14 @@ include("../administrador/config/connection.php");
     <!--table id="tablaUsuarios" class="table table-striped table-bordered table-condensed w-auto small nowrap" style="width:100%"-->
     <thead class="text-center">
       <tr>
-        <th>Codigo</th>
-        <th>Estado&nbsp;de&nbsp;envío</th>
+        <th>ID</th>
+        <th>Estado&nbsp;envío</th>
         <th>Fecha&nbsp;de&nbsp;envío</th>
         <th>Usuario&nbsp;de&nbsp;envío</th>
-        <th>Estado&nbsp;de&nbsp;aprobación</th>
-        <th>Fecha&nbsp;de&nbsp;aprobación</th>
-        <th>N°&nbsp;Beneficiarios</th>
+        <th>Estado&nbsp;pedido</th>
+        <th>Fecha&nbsp;aprobación</th>
+        <th>Beneficiarios</th>
+        <th>&nbsp;&nbsp;Observaciones&nbsp;&nbsp;&nbsp;</th>
         <th>Acción</th>
       </tr>
     </thead>
@@ -40,7 +41,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [7]
+        "aTargets": [8]
       },
       ]
     });
@@ -54,6 +55,7 @@ include("../administrador/config/connection.php");
       var estado_aprobacion = $('#estado_aprobacionField').val();
       var fecha_aprobacion = $('#fecha_aprobacionField').val();
       var numero_beneficiarios = $('#numero_beneficiariosField').val();
+      var observaciones = $('#observacionesField').val();
       
       var codEstatus = $("input[name=estatus]:checked").val();
 
@@ -70,6 +72,7 @@ include("../administrador/config/connection.php");
           estado_aprobacion: estado_aprobacion,
           fecha_aprobacion: fecha_aprobacion,
           numero_beneficiarios: numero_beneficiarios,
+          observaciones: observaciones,
           id_estado: codEstatus,
           id: id
         },
@@ -90,7 +93,7 @@ include("../administrador/config/connection.php");
               nomEst = 'Rechazado'
             }
 
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, button]);
+            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios,  observaciones, button]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -119,9 +122,12 @@ include("../administrador/config/connection.php");
           $('#estado_aprobacionField').val(json.estado_aprobacion);
           $('#fecha_aprobacionField').val(json.fecha_aprobacion);
           $('#numero_beneficiariosField').val(json.numero_beneficiarios);
+          $('#observacionesField').val(json.observaciones);
+
           $('#id').val(id);
           $('#trid').val(trid);
-          console.log("La Respuesta esta_de_acuerdoField es :" + json.fecha_aprobacion);
+
+          //console.log("La Respuesta esta_de_acuerdoField es :" + json.fecha_aprobacion);
           if (json.estado_aprobacion == "Pendiente") {
             $('#exampleModal').find(':radio[name=estatus][value="2"]').prop('checked', true);
           } else if (json.estado_aprobacion == "Aprobado") {
@@ -154,12 +160,11 @@ include("../administrador/config/connection.php");
   <!--div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"-->
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <!--div class="modal-dialog" role="document"-->
-
     <div class="modal-dialog modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR ESTADO DE SOLICITUDES</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="updateUser">
@@ -220,13 +225,19 @@ include("../administrador/config/connection.php");
               </div>
             </div>
 
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary">Actualizar</button>
+            <div class="mb-3 row">
+              <div class="col-md-6 text-center">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+              </div>
+              <div class="col-md-6 text-center">
+                <button type="submit" class="btn btn-primary">Descargar detalle</button>
+              </div>
             </div>
+
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
