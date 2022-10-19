@@ -288,6 +288,7 @@ include("../administrador/config/connection.php");
               </div>
               <div class="col-md-6 text-center">
                 <button type="button" class="btn btn-success">Descargar detalle</button>
+                <a href="#" class="btn btn-primary">Descargar detalle</a>
               </div>
             </div>
 

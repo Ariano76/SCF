@@ -105,7 +105,104 @@ BEGIN
 END |
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS `SP_reporte_finanzas_valorizacion`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_finanzas_valorizacion`(in codpaquete int)
+BEGIN
+	select fpd.id_beneficiario, fp.id_paquete, fp.fecha as 'fecha_envio' , fp.id_estado, fpa.id_estado, 
+enc.fecha_encuesta, b.region_beneficiario, b.en_que_provincia, b.en_que_distrito, b.transit_settle, 
+    b.primer_nombre, b.segundo_nombre, b.primer_apellido, b.segundo_apellido, 
+    CASE b.documentos_fisico_original 
+     WHEN 'Primero' THEN 'Cedula'
+     WHEN 'Segundo' THEN b.tipo_identificacion
+     WHEN 'Ninguno' THEN 'Cedula'
+     ELSE 'Cedula'
+	END AS 'Tipo de Identificacion', 
+    CASE b.documentos_fisico_original
+     WHEN 'Primero' THEN b.numero_cedula
+     WHEN 'Segundo' THEN b.numero_identificacion
+     WHEN 'Ninguno' THEN b.numero_cedula
+     ELSE b.numero_cedula
+	END AS 'Numero de identificacion', b.documentos_fisico_original, 
+    c.cual_es_su_numero_whatsapp, c.cual_es_su_numero_recibir_sms, c.cual_es_su_direccion, 
+    if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) +	if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1 as 'numero de personas en la familia',
+    c.tiene_los_siguientes_medios_comunicacion, c.como_accede_a_internet, 
+    F_SINO(dersec.interesado_participar_nutricion) as interesado_participar_nutricion, 
+    IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
+    and (c.como_accede_a_internet="Por wifi  por horas" 
+    or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
+    or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
+    or c.como_accede_a_internet="Ninguna de las anteriores"),"SI","NO") as bono_nutricion,
+    IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
+    and (c.como_accede_a_internet="Por wifi  por horas" 
+    or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
+    or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
+    or c.como_accede_a_internet="Ninguna de las anteriores"),
+    (SELECT asignacion from finanzas_bono_conectividad where id_conectividad=1),0) as bono_conectividad, 
+    curdate() as fecha_estadia_1,
+    CASE if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+     WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+     WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+     WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+     WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+     WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+     ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	END AS 'importe transferido estadia_1',
+    DATE_ADD(curdate(), INTERVAL 1 MONTH) as fecha_estadia_2,
+    CASE if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+     WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+     WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+     WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+     WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+     WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+     ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	END AS 'importe transferido estadia_2',
+    DATE_ADD(curdate(), INTERVAL 2 MONTH) as fecha_estadia_3,
+    CASE if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+     WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+     WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+     WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+     WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+     WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+     ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	END AS 'importe transferido estadia_3',
+    DATE_ADD(curdate(), INTERVAL 3 MONTH) as fecha_estadia_4,
+    CASE if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+     WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+     WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+     WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+     WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+     WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+     ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	END AS 'importe transferido estadia_4'
+from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
+inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
+inner join educacion e on fpd.id_beneficiario = e.id_beneficiario
+inner join encuesta enc on fpd.id_beneficiario = enc.id_beneficiario 
+inner join derivacion_sectores dersec on fpd.id_beneficiario = dersec.id_beneficiario 
+inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
+inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+inner join estados on estados.id_estado = est.id_estado 
+where fp.id_paquete = codpaquete;
+END |
+DELIMITER ;
 
 
 
@@ -185,7 +282,9 @@ SET @success = 0;
 call SP_Paquete_Finanzas_Insert('arequipa','percy',@success);
 select @success;
 
-call SP_reporte_finanzas_regiones();
+call SP_reporte_finanzas_regiones('arequipa');
 SELECT * FROM vista_finanzas_consulta ;
 SELECT * FROM vista_estatus;
 select * from vista_finanzas_consulta_aprobacion;
+
+call SP_reporte_finanzas_valorizacion(1);
