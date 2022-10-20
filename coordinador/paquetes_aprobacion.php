@@ -19,7 +19,7 @@ include("../administrador/config/connection.php");
         <th>Beneficiarios</th>
         <th>&nbsp;&nbsp;Observaciones&nbsp;&nbsp;&nbsp;</th>
         <th>Acción</th>
-        
+        <th>Download</th>
       </tr>
     </thead>
   </table>   
@@ -42,7 +42,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [8]
+        "aTargets": [9]
       },
       ]
     });
@@ -82,8 +82,9 @@ include("../administrador/config/connection.php");
           var status = json.status;
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
-            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
-            /*var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Download</a> </td>';*/
+            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td> <td>';
+            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm downloadbtn">Download</a> </td> <td> ';
+
             var row = table.row("[id='" + trid + "']");
 
             var nomEst;
@@ -95,7 +96,7 @@ include("../administrador/config/connection.php");
               nomEst = 'Rechazado'
             }
 
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios,  observaciones, button, button1]);
+            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, observaciones, button, button1]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -103,7 +104,7 @@ include("../administrador/config/connection.php");
         }
       });
     });
-  $('#tablaUsuarios').on('click', '.editbtn ', function(event) {
+  $('#tablaUsuarios').on('click', '.editbtn', function(event) {
     var table = $('#tablaUsuarios').DataTable();
     var trid = $(this).closest('tr').attr('id');
       // console.log(selectedRow);
@@ -140,10 +141,78 @@ include("../administrador/config/connection.php");
         }
       })
     });
+  $('#tablaUsuarios').on('click', '.downloadbtn', function(event) {
+    //event.preventDefault();
+    var id = $(this).data('id');
+    if (confirm("Are you sure want to download this data ? ")) {
+      $.ajax({
+        url: "repo_finanzas_valorizacion.php",
+        data: {
+          id: id
+        },
+        type: "post",
+        success: function(data) {
+          if (status == 'true') {
+            alert('Ok')
+          } else {
+            alert('failed');
+          }
+        }
+      });
+    } else {
+      return null;
+    }
+  })
 
-  </script>
+  /*function startAjax() {
+    var id = $(this).data('id');
+    $.ajax({
+      url: "repo_finanzas_valorizacion.php",
+      data: {
+        id: id
+      },
+      type: "post",
+      success: function(msg){
+        //alert( "Data Saved: " + msg );
+      }
+    });
+  }*/
+  /*
+  $(document).ready(startAjax);*/
+  
+  /*$('downloadbtn1').click(function() {
+  var id = $(this).data('id');
+   $.ajax({
+    type: "POST",
+    url: "repo_finanzas_valorizacion.php",
+    data: {
+      id: id
+    },
+    });
+  });*/
 
-  <script type="text/javascript">
+  /*$('downloadbtn1').click(function()
+  {
+    var id = $(this).data('id');
+    console.log(id);
+    $.ajax
+    ({
+      type: "POST",
+      url: "repo_finanzas_valorizacion.php",
+      data: {
+        id: id
+      },
+      success: function(msg)
+      {
+       alert( "Data Saved: " + msg );
+     }
+   });
+    return false;
+  });*/
+</script>
+
+
+<script type="text/javascript">
     //escribir la hora actual en una caja de texto, segundo a segundo.
     $(document).ready(function() {
      setInterval(runningTime, 1000);
@@ -232,7 +301,10 @@ include("../administrador/config/connection.php");
                 <button type="submit" class="btn btn-primary">Actualizar</button>
               </div>
               <div class="col-md-6 text-center">
-                <a href="repo_finanzas_valorizacion.php?codigopaquete=3" class="btn btn-primary">Descargar detalle</a>
+                <!--a href="repo_finanzas_valorizacion.php?id=3" class="btn btn-primary">Descargar detalle</a-->
+                <button type="button" onclick="myFun()" class="btn btn-primary downloadbtn1" id="downloadbtn1">download</button>
+                <button onclick="myFun()">Click me</button>
+                
               </div>
             </div>
 

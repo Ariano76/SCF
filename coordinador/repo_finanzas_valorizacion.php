@@ -10,13 +10,12 @@ $db_1 = new TransactionSCI();
 require_once ('../vendor/autoload.php');
 
 /*if (isset($_POST["import"])) {*/
-  $codigopaquete = 3;
-  //$codigopaquete = $_POST["codigopaquete"];
+  $id_paquete = $_POST["id"];
   $type = "OK";
   $dt = date('Y-m-d H:i:s');
   $timestamp1 = strtotime($dt);
   //$db_1->cotejo($timestamp1);
-  $usuarios = $db_1->select_repo_all("SP_reporte_finanzas_valorizacion", $codigopaquete);
+  $usuarios = $db_1->select_repo_all("SP_reporte_finanzas_valorizacion", $id_paquete);
 
   $spreadsheet = new Spreadsheet();
   $sheet = $spreadsheet->getActiveSheet();
