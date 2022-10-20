@@ -109,8 +109,8 @@ DROP PROCEDURE IF EXISTS `SP_reporte_finanzas_valorizacion`;
 DELIMITER |
 CREATE PROCEDURE `SP_reporte_finanzas_valorizacion`(in codpaquete int)
 BEGIN
-	select fpd.id_beneficiario, fp.id_paquete, fp.fecha as 'fecha_envio' , fp.id_estado, fpa.id_estado, 
-enc.fecha_encuesta, b.region_beneficiario, b.en_que_provincia, b.en_que_distrito, b.transit_settle, 
+	select fpd.id_beneficiario, fp.id_paquete, fe.estado as estado_aprobacion,
+	enc.fecha_encuesta, b.region_beneficiario, b.en_que_provincia, b.en_que_distrito, b.transit_settle, 
     b.primer_nombre, b.segundo_nombre, b.primer_apellido, b.segundo_apellido, 
     CASE b.documentos_fisico_original 
      WHEN 'Primero' THEN 'Cedula'
@@ -190,20 +190,22 @@ enc.fecha_encuesta, b.region_beneficiario, b.en_que_provincia, b.en_que_distrito
      WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
      ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
 	END AS 'importe transferido estadia_4'
-from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
-inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
-inner join educacion e on fpd.id_beneficiario = e.id_beneficiario
-inner join encuesta enc on fpd.id_beneficiario = enc.id_beneficiario 
-inner join derivacion_sectores dersec on fpd.id_beneficiario = dersec.id_beneficiario 
-inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
-inner join estatus est on b.id_beneficiario = est.id_beneficiario 
-inner join estados on estados.id_estado = est.id_estado 
-where fp.id_paquete = codpaquete;
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
+	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
+	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
+	inner join educacion e on fpd.id_beneficiario = e.id_beneficiario
+	inner join encuesta enc on fpd.id_beneficiario = enc.id_beneficiario 
+	inner join derivacion_sectores dersec on fpd.id_beneficiario = dersec.id_beneficiario 
+	inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
+	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
+	inner join estados on estados.id_estado = est.id_estado 
+	where fp.id_paquete = codpaquete;
 END |
 DELIMITER ;
 
+call SP_reporte_finanzas_valorizacion(3);
 
 
 
@@ -287,4 +289,4 @@ SELECT * FROM vista_finanzas_consulta ;
 SELECT * FROM vista_estatus;
 select * from vista_finanzas_consulta_aprobacion;
 
-call SP_reporte_finanzas_valorizacion(1);
+call SP_reporte_finanzas_valorizacion(3);

@@ -19,7 +19,7 @@ include("../administrador/config/connection.php");
         <th>Beneficiarios</th>
         <th>&nbsp;&nbsp;Observaciones&nbsp;&nbsp;&nbsp;</th>
         <th>Acción</th>
-        <th>Download</th>
+        
       </tr>
     </thead>
   </table>   
@@ -42,7 +42,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [9]
+        "aTargets": [8]
       },
       ]
     });
@@ -102,61 +102,6 @@ include("../administrador/config/connection.php");
           }
         }
       });
-    });
-  $(document).on('download', '#updateUser', function(e) {
-    e.preventDefault();
-      /*var estado = $('#estadoField').val();
-      var fecha_envio = $('#fecha_envioField').val();
-      var nombre_usuario = $('#nombre_usuarioField').val();
-      var estado_aprobacion = $('#estado_aprobacionField').val();
-      var fecha_aprobacion = $('#fecha_aprobacionField').val();
-      var numero_beneficiarios = $('#numero_beneficiariosField').val();
-      var observaciones = $('#observacionesField').val();
-      
-      var codEstatus = $("input[name=estatus]:checked").val();
-
-      var trid = $('#trid').val();
-      var id = $('#id').val();
-      
-      $.ajax({
-        url: "update_user_paquetes.php",
-        type: "post",
-        data: {
-          estado: estado,
-          fecha_envio: fecha_envio,
-          nombre_usuario: nombre_usuario,
-          estado_aprobacion: estado_aprobacion,
-          fecha_aprobacion: fecha_aprobacion,
-          numero_beneficiarios: numero_beneficiarios,
-          observaciones: observaciones,
-          id_estado: codEstatus,
-          id: id
-        },
-        success: function(data) {
-          var json = JSON.parse(data);
-          var status = json.status;
-          if (status == 'true') {
-            table = $('#tablaUsuarios').DataTable();
-            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
-            var row = table.row("[id='" + trid + "']");
-
-            var nomEst;
-            if (codEstatus==2) {
-              nomEst = 'Pendiente'
-            } else if (codEstatus==3){
-              nomEst = 'Aprobado'
-            } else if (codEstatus==4){
-              nomEst = 'Rechazado'
-            }
-
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios,  observaciones, button]);
-            $('#exampleModal').modal('hide');
-          } else {
-            alert('failed');
-          }
-        }
-      });*/
-      console.log("Respuesta Boton Download es : pulsado");
     });
   $('#tablaUsuarios').on('click', '.editbtn ', function(event) {
     var table = $('#tablaUsuarios').DataTable();
@@ -287,8 +232,7 @@ include("../administrador/config/connection.php");
                 <button type="submit" class="btn btn-primary">Actualizar</button>
               </div>
               <div class="col-md-6 text-center">
-                <button type="button" class="btn btn-success">Descargar detalle</button>
-                <a href="#" class="btn btn-primary">Descargar detalle</a>
+                <a href="repo_finanzas_valorizacion.php?codigopaquete=3" class="btn btn-primary">Descargar detalle</a>
               </div>
             </div>
 
