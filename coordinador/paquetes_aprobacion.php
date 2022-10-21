@@ -83,7 +83,7 @@ include("../administrador/config/connection.php");
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td> <td>';
-            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm downloadbtn">Download</a> </td> <td> ';
+            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm deletebtn">Download</a> </td> <td> ';
 
             var row = table.row("[id='" + trid + "']");
 
@@ -126,10 +126,8 @@ include("../administrador/config/connection.php");
           $('#fecha_aprobacionField').val(json.fecha_aprobacion);
           $('#numero_beneficiariosField').val(json.numero_beneficiarios);
           $('#observacionesField').val(json.observaciones);
-
           $('#id').val(id);
           $('#trid').val(trid);
-
           //console.log("La Respuesta esta_de_acuerdoField es :" + json.fecha_aprobacion);
           if (json.estado_aprobacion == "Pendiente") {
             $('#exampleModal').find(':radio[name=estatus][value="2"]').prop('checked', true);
@@ -141,74 +139,55 @@ include("../administrador/config/connection.php");
         }
       })
     });
-  $('#tablaUsuarios').on('click', '.downloadbtn', function(event) {
-    //event.preventDefault();
-    var id = $(this).data('id');
-    if (confirm("Are you sure want to download this data ? ")) {
-      $.ajax({
-        url: "repo_finanzas_valorizacion.php",
-        data: {
-          id: id
-        },
-        type: "post",
-        success: function(data) {
+  $(document).on('click', '.deletebtn', function(event) {
+    event.preventDefault();
+      var id = $(this).data('id');
+      if (confirm("Are you sure want to download this data ? ")) {
+        $.ajax({
+          url: "repo_finanzas_valorizacion.php",
+          data: {
+            id: id
+          },
+          type: "post",
+          //responseType:'arraybuffer',
+          //dataType: 'binary',
+          //headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          //cache: false,
+          //enctype: 'multipart/form-data',
+          //contentType: true,
+          //processData: false,
+          success: function() {
+            $('#id').val(id);
+            window.open('repo_finanzas_valorizacion.php','_blank' );
+            //window.location = 'repo_finanzas_valorizacion.php';// you can use window.open also
+
+          },
+
+          //cache: false,
+          //enctype: 'multipart/form-data',
+          //contentType: true,
+          //processData: false,
+          //success: completeHandler
+
+        /*success: function() {
+          //var json = JSON.parse(data);
+          $('#id').val(id);
+          $('#trid').val(trid);
           if (status == 'true') {
             alert('Ok')
           } else {
             alert('failed');
           }
-        }
+        }*/
+
       });
-    } else {
-      return null;
-    }
-  })
-
-  /*function startAjax() {
-    var id = $(this).data('id');
-    $.ajax({
-      url: "repo_finanzas_valorizacion.php",
-      data: {
-        id: id
-      },
-      type: "post",
-      success: function(msg){
-        //alert( "Data Saved: " + msg );
+      } else {
+        return null;
       }
-    });
-  }*/
-  /*
-  $(document).ready(startAjax);*/
-  
-  /*$('downloadbtn1').click(function() {
-  var id = $(this).data('id');
-   $.ajax({
-    type: "POST",
-    url: "repo_finanzas_valorizacion.php",
-    data: {
-      id: id
-    },
-    });
-  });*/
-
-  /*$('downloadbtn1').click(function()
-  {
-    var id = $(this).data('id');
-    console.log(id);
-    $.ajax
-    ({
-      type: "POST",
-      url: "repo_finanzas_valorizacion.php",
-      data: {
-        id: id
-      },
-      success: function(msg)
-      {
-       alert( "Data Saved: " + msg );
-     }
-   });
-    return false;
-  });*/
+    })
+  function completeHandler() {
+    alert(":)");
+  }    
 </script>
 
 
@@ -302,6 +281,8 @@ include("../administrador/config/connection.php");
               </div>
               <div class="col-md-6 text-center">
                 <!--a href="repo_finanzas_valorizacion.php?id=3" class="btn btn-primary">Descargar detalle</a-->
+                <a class="btn btn-primary" href='repo_finanzas_valorizacion.php?id=<?php echo $_POST["id"]; ?>'>Descargar detalle</a>
+
                 <button type="button" onclick="myFun()" class="btn btn-primary downloadbtn1" id="downloadbtn1">download</button>
                 <button onclick="myFun()">Click me</button>
                 

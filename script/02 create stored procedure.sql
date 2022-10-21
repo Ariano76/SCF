@@ -289,4 +289,5 @@ SELECT * FROM vista_finanzas_consulta ;
 SELECT * FROM vista_estatus;
 select * from vista_finanzas_consulta_aprobacion;
 
-call SP_reporte_finanzas_valorizacion(3);
+call SP_reporte_finanzas_valorizacion(3)
+

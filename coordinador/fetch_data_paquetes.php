@@ -61,7 +61,7 @@ while($row = mysqli_fetch_assoc($query))
 	
 	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm editbtn" >Edit</a>';
 
-	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm downloadbtn" >Download</a>';
+	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm deletebtn" >Download</a>';
 	
 	$data[] = $sub_array;
 }

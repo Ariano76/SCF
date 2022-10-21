@@ -9,16 +9,14 @@ $db_1 = new TransactionSCI();
 
 require_once ('../vendor/autoload.php');
 
-//if (isset($_POST['id'])) {
-  //$id_paquete = 3;
-  $codigo = $_POST['data-id'];
-  echo "<script>console.log('Codigo: " . $codigo . "' );</script>"; 
-  
+//if (isset($_POST["import"])) {
+  //$id_paquete = 1;
+  $id_paquete = $_POST['id'];
   $type = "OK";
   $dt = date('Y-m-d H:i:s');
   $timestamp1 = strtotime($dt);
   //$db_1->cotejo($timestamp1);
-  $usuarios = $db_1->select_repo_all("SP_reporte_finanzas_valorizacion", $codigo);
+  $usuarios = $db_1->select_repo_all("SP_reporte_finanzas_valorizacion", $id_paquete);
 
   $spreadsheet = new Spreadsheet();
   $sheet = $spreadsheet->getActiveSheet();
@@ -102,7 +100,5 @@ require_once ('../vendor/autoload.php');
   $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
   $writer->save('php://output');  
 
-/*}else{
-  echo "<script>console.log('No entro: ' );</script>"; 
-}*/
+//}
 ?>
