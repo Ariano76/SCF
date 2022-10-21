@@ -3,6 +3,10 @@
 include("../administrador/config/connection.php");
 
 ?>
+
+<script type="text/javascript" src="script/bootbox.min.js"></script>
+<script type="text/javascript" src="script/deleteRecords.js"></script>
+
 <h1 class="display-8">CONSULTA DE PAQUETES RECIBIDOS</h1> 
 
 <div class="col-lg-12">
@@ -82,8 +86,9 @@ include("../administrador/config/connection.php");
           var status = json.status;
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
-            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td> <td>';
-            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm deletebtn">Download</a> </td> <td> ';
+            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
+            //var button1 = '<td><a href="#!" data-id="' + id + '" class="btn btn-info btn-sm deletebtn">Download</a> </td> <td> ';
+            var button2 = '<td><a class="delete_employee" data-emp-id="' + id + '" href=#!><i class="fas fa-trash-alt"></i></a> </td> ';
 
             var row = table.row("[id='" + trid + "']");
 
@@ -96,7 +101,7 @@ include("../administrador/config/connection.php");
               nomEst = 'Rechazado'
             }
 
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, observaciones, button, button1]);
+            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, observaciones, button, button2]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -139,59 +144,34 @@ include("../administrador/config/connection.php");
         }
       })
     });
-  $(document).on('click', '.deletebtn', function(event) {
-    event.preventDefault();
-      var id = $(this).data('id');
-      if (confirm("Are you sure want to download this data ? ")) {
-        $.ajax({
-          url: "repo_finanzas_valorizacion.php",
-          data: {
-            id: id
-          },
-          type: "post",
-          //responseType:'arraybuffer',
-          //dataType: 'binary',
-          //headers: { 'X-Requested-With': 'XMLHttpRequest' },
-          //cache: false,
-          //enctype: 'multipart/form-data',
-          //contentType: true,
-          //processData: false,
-          success: function() {
-            $('#id').val(id);
-            window.open('repo_finanzas_valorizacion.php','_blank' );
-            //window.location = 'repo_finanzas_valorizacion.php';// you can use window.open also
-
-          },
-
-          //cache: false,
-          //enctype: 'multipart/form-data',
-          //contentType: true,
-          //processData: false,
-          //success: completeHandler
-
-        /*success: function() {
-          //var json = JSON.parse(data);
-          $('#id').val(id);
-          $('#trid').val(trid);
-          if (status == 'true') {
-            alert('Ok')
-          } else {
-            alert('failed');
+  /*$('.delete_employee').click(function(){
+    var el = this;
+    var id = $(this).attr('data-emp-id');
+    console.log("La Respuesta esta_de_acuerdoField es :" + json.id);
+      // Confirm box
+      bootbox.confirm("¿ Esta seguro de que desea eliminar el usuario ? ", function(result) {
+        if(result){
+         // AJAX Request
+         $.ajax({
+          type: 'POST',           
+          url: 'repo_finanzas_valorizacion.php',
+          data: { id:id, accion:0 },
+            success: function(response){
+             // Removing row from HTML Table
+             if(response == 1){
+              bootbox.alert('Exito.');
+            }else{
+              bootbox.alert('Record not deleted.');
+            }
           }
-        }*/
+        });
+       }
+     });
+   });*/
 
-      });
-      } else {
-        return null;
-      }
-    })
-  function completeHandler() {
-    alert(":)");
-  }    
-</script>
+ </script>
 
-
-<script type="text/javascript">
+ <script type="text/javascript">
     //escribir la hora actual en una caja de texto, segundo a segundo.
     $(document).ready(function() {
      setInterval(runningTime, 1000);
@@ -298,6 +278,38 @@ include("../administrador/config/connection.php");
     </div>
   </div>
 
+  <!-- Download Modal -->
+  <div class="modal fade bd-example-modal-lg" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <!--div class="modal-dialog" role="document"-->
+    <div class="modal-dialog modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR ESTADO DE SOLICITUDES</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateUser">
+            <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="trid" id="trid" value="">
 
+            <div class="mb-3 row">
+              <label for="estadoField" class="col-md-4 form-label">Estado de envío</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="estadoField" name="name" disabled>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <div class="col-md-6 text-center">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <?php include("../administrador/template/pie.php"); ?>

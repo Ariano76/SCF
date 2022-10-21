@@ -10,9 +10,9 @@ $db_1 = new TransactionSCI();
 require_once ('../vendor/autoload.php');
 
 //if (isset($_POST['id'])) {
-  //$id_paquete = 3;
-  $codigo = $_POST['data-id'];
-  echo "<script>console.log('Codigo: " . $codigo . "' );</script>"; 
+  //$codigo = 1;
+  $codigo = $_POST['id'];
+  //echo "<script>console.log('Codigo: " . $codigo . "' );</script>"; 
   
   $type = "OK";
   $dt = date('Y-m-d H:i:s');
@@ -101,6 +101,7 @@ require_once ('../vendor/autoload.php');
 
   $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
   $writer->save('php://output');  
+
 
 /*}else{
   echo "<script>console.log('No entro: ' );</script>"; 
