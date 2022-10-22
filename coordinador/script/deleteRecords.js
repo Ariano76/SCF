@@ -3,7 +3,6 @@
  /* tercer intento: */
 
  $(document).ready(function(){
-
   // Delete 
   $('.delete_employee').click(function(){
   	var el = this;

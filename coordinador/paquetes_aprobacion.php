@@ -4,9 +4,6 @@ include("../administrador/config/connection.php");
 
 ?>
 
-<script type="text/javascript" src="script/bootbox.min.js"></script>
-<script type="text/javascript" src="script/deleteRecords.js"></script>
-
 <h1 class="display-8">CONSULTA DE PAQUETES RECIBIDOS</h1> 
 
 <div class="col-lg-12">
@@ -87,8 +84,8 @@ include("../administrador/config/connection.php");
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
-            //var button1 = '<td><a href="#!" data-id="' + id + '" class="btn btn-info btn-sm deletebtn">Download</a> </td> <td> ';
-            var button2 = '<td><a class="delete_employee" data-emp-id="' + id + '" href=#!><i class="fas fa-trash-alt"></i></a> </td> ';
+            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm downloadbtn">Download</a> </td> <td> ';
+            //var button2 = '<td align="center"><a class="delete_employee" data-emp-id="' + id + '" href=#!><i class="fas fa-trash-alt"></i></a> </td> ';
 
             var row = table.row("[id='" + trid + "']");
 
@@ -143,6 +140,43 @@ include("../administrador/config/connection.php");
           } 
         }
       })
+    });
+  $('#tablaUsuarios').on('click', '.downloadbtn', function(event) {
+    var table = $('#tablaUsuarios').DataTable();
+    var trid = $(this).closest('tr').attr('id');
+      // console.log(selectedRow);
+      var id = $(this).data('id');
+      $('#downloadModal').modal('show');
+      console.log("La Respuesta esta_de_acuerdoField es :" + json.id);
+
+      $.ajax({
+        url: "get_single_paquetes.php",
+        data: {
+          id: id
+        },
+        type: 'post',
+        success: function(data) {
+          var json = JSON.parse(data);
+          $('#estadoField').val(json.estado);
+          $('#fecha_envioField').val(json.fecha_envio);
+          $('#nombre_usuarioField').val(json.nombre_usuario);
+          $('#estado_aprobacionField').val(json.estado_aprobacion);
+          $('#fecha_aprobacionField').val(json.fecha_aprobacion);
+          $('#numero_beneficiariosField').val(json.numero_beneficiarios);
+          $('#observacionesField').val(json.observaciones);
+          $('#id').val(id);
+          $('#trid').val(trid);
+          //console.log("La Respuesta esta_de_acuerdoField es :" + json.fecha_aprobacion);
+          if (json.estado_aprobacion == "Pendiente") {
+            $('#exampleModal').find(':radio[name=estatus][value="2"]').prop('checked', true);
+          } else if (json.estado_aprobacion == "Aprobado") {
+            $('#exampleModal').find(':radio[name=estatus][value="3"]').prop('checked', true);
+          } else if (json.estado_aprobacion == "Rechazado") {
+            $('#exampleModal').find(':radio[name=estatus][value="4"]').prop('checked', true);
+          } 
+        }
+      })
+      
     });
   /*$('.delete_employee').click(function(){
     var el = this;
@@ -284,23 +318,20 @@ include("../administrador/config/connection.php");
     <div class="modal-dialog modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR ESTADO DE SOLICITUDES</h5>
+          <h5 class="modal-title" id="exampleModalLabel">DESCARGAR DETALLE DE LAS SOLICITUDES</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="updateUser">
+          <form id="download">
             <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="trid" id="trid" value="">
 
             <div class="mb-3 row">
-              <label for="estadoField" class="col-md-4 form-label">Estado de envío</label>
-              <div class="col-md-8">
-                <input type="text" class="form-control" id="estadoField" name="name" disabled>
-              </div>
+              <label for="estadoField" class="col-md-12 form-label text-center">¿Desea descargar el documento correspondiente?</label>              
             </div>
             <div class="mb-3 row">
-              <div class="col-md-6 text-center">
-                <button type="submit" class="btn btn-primary">Actualizar</button>
+              <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Descargar</button>
               </div>
             </div>
           </form>
