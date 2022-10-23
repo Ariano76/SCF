@@ -83,10 +83,9 @@ include("../administrador/config/connection.php");
           var status = json.status;
           if (status == 'true') {
             table = $('#tablaUsuarios').DataTable();
-            var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
-            var button1 = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm downloadbtn">Download</a> </td> <td> ';
-            //var button2 = '<td align="center"><a class="delete_employee" data-emp-id="' + id + '" href=#!><i class="fas fa-trash-alt"></i></a> </td> ';
-
+            var button = '<td align="center"><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
+            var button1 = '<td align="center"><a href="#!" data-id="' + id + '" class="btn btn-info btn-sm downloadbtn">Download</a> </td> ';
+            //var button2 = '<td align="center"><a class="delete_employee" data-bs-toggle="modal" data-bs-target="#addUserModal" data-emp-id="' + id + '" href=#!> <i class="fas fa-cloud-download-alt" style="color: blue"></i></a> </td> ';
             var row = table.row("[id='" + trid + "']");
 
             var nomEst;
@@ -98,7 +97,7 @@ include("../administrador/config/connection.php");
               nomEst = 'Rechazado'
             }
 
-            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, observaciones, button, button2]);
+            row.row("[id='" + trid + "']").data([id, estado, fecha_envio, nombre_usuario, nomEst, fecha_aprobacion, numero_beneficiarios, observaciones, button, button1]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -141,71 +140,39 @@ include("../administrador/config/connection.php");
         }
       })
     });
-  $('#tablaUsuarios').on('click', '.downloadbtn', function(event) {
-    var table = $('#tablaUsuarios').DataTable();
-    var trid = $(this).closest('tr').attr('id');
-      // console.log(selectedRow);
-      var id = $(this).data('id');
-      $('#downloadModal').modal('show');
-      console.log("La Respuesta esta_de_acuerdoField es :" + json.id);
-
-      $.ajax({
-        url: "get_single_paquetes.php",
-        data: {
-          id: id
-        },
-        type: 'post',
-        success: function(data) {
-          var json = JSON.parse(data);
-          $('#estadoField').val(json.estado);
-          $('#fecha_envioField').val(json.fecha_envio);
-          $('#nombre_usuarioField').val(json.nombre_usuario);
-          $('#estado_aprobacionField').val(json.estado_aprobacion);
-          $('#fecha_aprobacionField').val(json.fecha_aprobacion);
-          $('#numero_beneficiariosField').val(json.numero_beneficiarios);
-          $('#observacionesField').val(json.observaciones);
-          $('#id').val(id);
-          $('#trid').val(trid);
-          //console.log("La Respuesta esta_de_acuerdoField es :" + json.fecha_aprobacion);
-          if (json.estado_aprobacion == "Pendiente") {
-            $('#exampleModal').find(':radio[name=estatus][value="2"]').prop('checked', true);
-          } else if (json.estado_aprobacion == "Aprobado") {
-            $('#exampleModal').find(':radio[name=estatus][value="3"]').prop('checked', true);
-          } else if (json.estado_aprobacion == "Rechazado") {
-            $('#exampleModal').find(':radio[name=estatus][value="4"]').prop('checked', true);
-          } 
+  // codigo venta modal para descargar el archivo
+  $('#tablaUsuarios').on('click', '.downloadbtn', function(e) {
+    e.preventDefault();
+    var trid = $('#trid').val();
+    //var id = $('#id').val();
+    var id = $(this).data('id');
+    console.log('El codigo que se ha enviado es: '+id);
+    //$('#downloadModal').modal('show');
+    $.ajax({
+      url: "repo_finanzas_valorizacion.php",
+      type: "get",
+      data: {
+        id: id
+      },
+      success: function(data) {
+        window.open('repo_finanzas_valorizacion.php?id='+id,'_blank' ); 
+        var json = JSON.parse(data);
+        var status = json.status;
+        if (status == 'true') {
+          /*mytable = $('#tablaUsuarios').DataTable();
+          mytable.draw();*/
+          alert('Ok');
+          //$('#downloadModal').modal('hide');
+        } else {
+          alert('failed');
         }
-      })
-      
+      }
     });
-  /*$('.delete_employee').click(function(){
-    var el = this;
-    var id = $(this).attr('data-emp-id');
-    console.log("La Respuesta esta_de_acuerdoField es :" + json.id);
-      // Confirm box
-      bootbox.confirm("¿ Esta seguro de que desea eliminar el usuario ? ", function(result) {
-        if(result){
-         // AJAX Request
-         $.ajax({
-          type: 'POST',           
-          url: 'repo_finanzas_valorizacion.php',
-          data: { id:id, accion:0 },
-            success: function(response){
-             // Removing row from HTML Table
-             if(response == 1){
-              bootbox.alert('Exito.');
-            }else{
-              bootbox.alert('Record not deleted.');
-            }
-          }
-        });
-       }
-     });
-   });*/
+  });  
+  
+</script>
 
- </script>
-
- <script type="text/javascript">
+<script type="text/javascript">
     //escribir la hora actual en una caja de texto, segundo a segundo.
     $(document).ready(function() {
      setInterval(runningTime, 1000);
@@ -290,17 +257,9 @@ include("../administrador/config/connection.php");
             </div>
 
             <div class="mb-3 row">
-              <div class="col-md-6 text-center">
+              <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Actualizar</button>
               </div>
-              <div class="col-md-6 text-center">
-                <!--a href="repo_finanzas_valorizacion.php?id=3" class="btn btn-primary">Descargar detalle</a-->
-                <a class="btn btn-primary" href='repo_finanzas_valorizacion.php?id=<?php echo $_POST["id"]; ?>'>Descargar detalle</a>
-
-                <button type="button" onclick="myFun()" class="btn btn-primary downloadbtn1" id="downloadbtn1">download</button>
-                <button onclick="myFun()">Click me</button>
-                
-              </div>
             </div>
 
           </form>
@@ -312,35 +271,5 @@ include("../administrador/config/connection.php");
     </div>
   </div>
 
-  <!-- Download Modal -->
-  <div class="modal fade bd-example-modal-lg" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <!--div class="modal-dialog" role="document"-->
-    <div class="modal-dialog modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">DESCARGAR DETALLE DE LAS SOLICITUDES</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="download">
-            <input type="hidden" name="id" id="id" value="">
-            <input type="hidden" name="trid" id="trid" value="">
-
-            <div class="mb-3 row">
-              <label for="estadoField" class="col-md-12 form-label text-center">¿Desea descargar el documento correspondiente?</label>              
-            </div>
-            <div class="mb-3 row">
-              <div class="col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Descargar</button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <?php include("../administrador/template/pie.php"); ?>

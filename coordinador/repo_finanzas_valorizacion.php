@@ -11,7 +11,8 @@ require_once ('../vendor/autoload.php');
 
 //if (isset($_POST['id'])) {
   //$codigo = 1;
-  $codigo = $_POST['id'];
+  //$codigo = $_POST['id'];
+  $codigo = $_GET['id'];
   //echo "<script>console.log('Codigo: " . $codigo . "' );</script>"; 
   
   $type = "OK";
