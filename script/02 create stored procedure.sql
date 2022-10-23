@@ -66,7 +66,9 @@ BEGIN
 	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
 	where estados.id_estado = 1 and b.region_beneficiario = depa and 
-    b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
+    b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
+where fpa.id_estado = 4);
     
     SET @usuario = Codigo_User(usuario);
     
@@ -80,7 +82,9 @@ BEGIN
 		inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 		inner join estados on estados.id_estado = est.id_estado 
 		where estados.id_estado = 1 and b.region_beneficiario = depa and 
-		b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle);
+		b.id_beneficiario not in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
+where fpa.id_estado = 4);
         
         /* estado = 2 (pendiente) */
         insert into finanzas_paquete_aprobacion(id_paquete, id_estado, id_usuario_envio) 
@@ -100,7 +104,9 @@ BEGIN
     FROM beneficiario b inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
 	where estados.id_estado = 1 and 
-	b.id_beneficiario not in (select id_beneficiario from finanzas_paquete_detalle) 
+	b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+	inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
+	where fpa.id_estado = 4) 
     order by b.region_beneficiario;
 END |
 DELIMITER ;

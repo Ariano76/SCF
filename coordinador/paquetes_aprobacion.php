@@ -156,16 +156,15 @@ include("../administrador/config/connection.php");
       },
       success: function(data) {
         window.open('repo_finanzas_valorizacion.php?id='+id,'_blank' ); 
-        var json = JSON.parse(data);
+        
+        /*var json = JSON.parse(data);
         var status = json.status;
         if (status == 'true') {
-          /*mytable = $('#tablaUsuarios').DataTable();
-          mytable.draw();*/
           alert('Ok');
-          //$('#downloadModal').modal('hide');
         } else {
           alert('failed');
-        }
+        }*/
+
       }
     });
   });  

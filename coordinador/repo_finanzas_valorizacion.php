@@ -2,7 +2,6 @@
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-//require_once './administrador/config/bd.php';
 require_once '../administrador/config/bdPDO.php';
 
 $db_1 = new TransactionSCI();
