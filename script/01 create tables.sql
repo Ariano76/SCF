@@ -18,6 +18,7 @@ DROP TABLE if exists finanzas_paquete;
 DROP TABLE if exists finanzas_estados;
 DROP TABLE if exists finanzas_bono_conectividad;
 DROP TABLE if exists finanzas_bono_familiar;
+DROP TABLE if exists finanzas_tipo_documento;
 
 /*********************************
 -- CREACION DE TABLAS 
@@ -76,6 +77,11 @@ CREATE TABLE finanzas_bono_familiar
     PRIMARY KEY (id_familiar)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
+CREATE TABLE finanzas_tipo_documento
+(	id_tipo_documento	INTEGER NOT NULL AUTO_INCREMENT,
+	documento			VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id_tipo_documento)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 
 
@@ -109,4 +115,11 @@ insert into finanzas_estados (estado) values ('Rechazado');
 insert into finanzas_bono_conectividad (asignacion) values (120.50);
 
 insert into finanzas_bono_familiar (asignacion) values (300.50),(500.50),(900.50),(1300.50),(5300.50),(9300.50);
+insert into finanzas_tipo_documento (documento) 
+values ('DNI'),('Otro'),('CPP'),('Carnet Extranjeria'),('Ruc'),('Pasaporte'),('PTP'),('Cedula'),('Carné de Refugiado');
+
+/***********************************************
+-- REINICIAR EL AUTO INCREMENTE DE LAS TABLAS 
+************************************************/
+ALTER TABLE finanzas_tipo_documento AUTO_INCREMENT = 1;
 
