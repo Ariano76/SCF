@@ -49,7 +49,8 @@ BEGIN
 	SELECT fpd.id_beneficiario FROM bd_bha_sci.finanzas_paquete_detalle as fpd
 	inner join finanzas_paquete_aprobacion as fpa on fpd.id_paquete = fpa.id_paquete
 	inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-	where fpa.id_estado = 2 ));
+	where fpa.id_estado = 2 )
+    );
 END |
 DELIMITER ;
 
@@ -229,7 +230,55 @@ BEGIN
 END |
 DELIMITER ;
 
-call SP_reporte_finanzas_valorizacion(3);
+DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_recarga_tpp`(in codpaquete int)
+BEGIN
+	select null as Refeplanilla, null as agencia, null as orden, null as fecha,	null as monto, 
+    'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
+	'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
+	20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
+	null as tlfmovilremite, 'AV JAVIER PRADO OESTE 890' as domicremite, 'SAN ISIDRO' as	ciudadremite,
+	'LIMA' as estadoremite, b.primer_apellido as apepatbenef, b.segundo_apellido as apematbenef, 
+    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombbenef, 
+    CASE b.documentos_fisico_original 
+     WHEN 'Primero' THEN '8 - Cedula'
+     WHEN 'Segundo' THEN 
+		case b.tipo_identificacion
+			when 'DNI' then '1 - DNI'
+            when 'CPP' then '3 - CPP'
+            when 'Carnet de Extranjeria' then '4 - Carnet de Extranjeria'
+            when 'Pasaporte' then '6 - Pasaporte'
+            when 'PTP' then '7 - PTP'
+            when 'Cedula' then '8 - Cedula'
+            when 'Carnet de Refugiado' then '9 - Carné de Refugiado'
+            else '2 - Otro'
+		end
+     WHEN 'Ninguno' THEN '8 - Cedula'
+     ELSE '8 - Cedula'
+	END AS 'tipoidbenef', 
+    CASE b.documentos_fisico_original
+     WHEN 'Primero' THEN b.numero_cedula
+     WHEN 'Segundo' THEN b.numero_identificacion
+     WHEN 'Ninguno' THEN b.numero_cedula
+     ELSE b.numero_cedula
+	END AS 'nroidbenef', 
+    null as nacionbenef, null as 'residebenef', c.cual_es_su_numero_whatsapp as tlffijobenef, 
+    c.cual_es_su_numero_recibir_sms as tlfmovilbenef, c.cual_es_su_direccion as domicbenef,
+    b.en_que_provincia as ciudadbenef,	b.en_que_provincia as estadobenef,
+	fpd.id_beneficiario, fp.id_paquete,     
+    null as nombrebanco, null as cuentabanco, null as tipocuenta, null as emailremite, null as emailbenef,
+	null as codint, null as	codseguim, null as numtjt
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
+	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
+	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
+	where fpa.id_estado = 3;
+END |
+DELIMITER ;
+
+
 
 
 
@@ -268,6 +317,17 @@ CREATE VIEW `vista_finanzas_consulta` AS
 	group by fp.id_paquete,  fe1.estado, fp.fecha , usu.nombre_usuario, fe2.estado;
 DELIMITER ;
 
+DROP VIEW IF EXISTS vista_finanzas_paquetes_aprobados;
+CREATE VIEW `vista_finanzas_paquetes_aprobados` AS
+	select fp.id_paquete, fp.fecha as 'fecha_envio', fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, 
+    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    where fpa.id_estado = 3
+    group by fp.id_paquete, fp.fecha, fe2.estado, fpa.fecha_aprobacion;
+DELIMITER ;
+
 DROP VIEW IF EXISTS vista_finanzas_consulta_aprobacion;
 CREATE VIEW `vista_finanzas_consulta_aprobacion` AS
 	select fp.id_paquete, fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
@@ -293,7 +353,7 @@ CREATE VIEW `vista_finanzas_bono_familiar` AS
     FROM finanzas_bono_familiar;
 DELIMITER ;
 
-select * from vista_finanzas_bono_conectividad;
+select * from vista_finanzas_paquetes_aprobados;
 /*********************************
 -- PRUEBAS
 *********************************/

@@ -7,14 +7,14 @@ include("../administrador/config/connection.php");
 <h1 class="display-8">CONSULTA DE PAQUETES RECIBIDOS</h1> 
 
 <div class="col-lg-12">
-  <table id="tablaUsuarios" class="table table-striped table-bordered table-condensed small" style="width:100%">
+  <table id="tablaUsuarios" class="table table-striped table-bordered table-condensed w-auto small " style="width:100%">
     <!--table id="tablaUsuarios" class="table table-striped table-bordered table-condensed w-auto small nowrap" style="width:100%"-->
     <thead class="text-center">
       <tr>
         <th>ID</th>
         <th>Estado&nbsp;envío</th>
-        <th>Fecha&nbsp;de&nbsp;envío</th>
-        <th>Usuario&nbsp;de&nbsp;envío</th>
+        <th>Fecha&nbsp;envío</th>
+        <th>Usuario&nbsp;envío</th>
         <th>Estado&nbsp;pedido</th>
         <th>Fecha&nbsp;aprobación</th>
         <th>Beneficiarios</th>
@@ -156,14 +156,6 @@ include("../administrador/config/connection.php");
       },
       success: function(data) {
         window.open('repo_finanzas_valorizacion.php?id='+id,'_blank' ); 
-        
-        /*var json = JSON.parse(data);
-        var status = json.status;
-        if (status == 'true') {
-          alert('Ok');
-        } else {
-          alert('failed');
-        }*/
 
       }
     });

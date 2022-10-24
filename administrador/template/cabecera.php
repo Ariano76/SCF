@@ -158,9 +158,7 @@ document.addEventListener("DOMContentLoaded", function(){
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tareas</a>
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="<?php echo $url."/coordinador/paquetes_aprobacion.php"?>">Aprobar paquetes</a>
-								<a class="dropdown-item" href="<?php echo $url."/coordinador/bono_conectividad.php"?>">Limpieza de datos</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/repo_validacion_dni.php"?>">Documentos</a>
 							</div>
 						</li>
 						<li>
@@ -170,22 +168,7 @@ document.addEventListener("DOMContentLoaded", function(){
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/coordinador/bono_familiar.php"?>">Familiar</a>
 							</div>
-						</li>			
-						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Migrar Datos</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_historica.php" ?>">Datos Validados</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Beneficiarios</a>
-							</div>
-						</li>
-						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reportes Control</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_001.php" ?>">Número de beneficiarios</a>
-								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_002.php" ?>">Número de hogares con embarazadas</a>
-							</div>
-						</li>					
+						</li>				
 
 						<a class="nav-item nav-link" href="<?php echo $url."/administrador/seccion/cerrar.php"?>">Cerrar</a>
 						<a class="nav-item nav-link" href="<?php echo $url;?>">Ver sitio web</a>
@@ -207,11 +190,11 @@ document.addEventListener("DOMContentLoaded", function(){
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 					<div class="navbar-nav">
 						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Migrar Datos</a>
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Proveedores de Pago</a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_historica.php" ?>">Datos Historicos Nuevos Validados</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/finanza_paquete.php" ?>">Reporte</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Nuevos Beneficiarios Validados</a>
+								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">TPP</a>
 							</div>
 						</li>
 						<li>
@@ -221,15 +204,6 @@ document.addEventListener("DOMContentLoaded", function(){
 								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_002.php" ?>">Número de hogares con embarazadas</a>
 								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_003.php" ?>">Hogares con familiares con discapacidad</a>
 							</div>
-						</li>
-						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Finanzas</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/paquete_finanzas.php" ?>">Crear Paquete</a>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/generar_paquete.php" ?>">Consultar Paquetes</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/generar_paquete.php" ?>">Enviar Proveedor Pago</a>
-							</div>
 						</li>						
 						<a class="nav-item nav-link" href="<?php echo $url."/administrador/seccion/cerrar.php"?>">Cerrar</a>
 						<a class="nav-item nav-link" href="<?php echo $url;?>">Ver sitio web</a>
@@ -238,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function(){
 			</div>
 		</nav>
 		<?php	
-	}else{ // ROL GERENCIA
+	}else{ // ROLES NO FINANZAS
 		?>
 		<nav class="navbar navbar-expand-md navbar-light bg-white border border-dark">
 			<div class="container-fluid">		

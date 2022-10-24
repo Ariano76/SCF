@@ -1,28 +1,25 @@
 <?php include("../administrador/config/connection.php");
 
 $output= array();
-$sql = "SELECT * FROM vista_finanzas_consulta_aprobacion";
+$sql = "SELECT * FROM vista_finanzas_paquetes_aprobados";
 
 $totalQuery = mysqli_query($con,$sql);
 $total_all_rows = mysqli_num_rows($totalQuery);
 
-$columns = array(
+$columns = array(	
 	0 => 'id_paquete',
-	1 => 'estado',
-	2 => 'fecha_envio',
-	3 => 'nombre_usuario',
-	4 => 'estado_aprobacion',
-	5 => 'fecha_aprobacion',
-	6 => 'numero_beneficiarios',
-	7 => 'observaciones',
+	1 => 'fecha_envio',
+	2 => 'estado_aprobacion',
+	3 => 'fecha_aprobacion',
+	4 => 'numero_beneficiarios',	
 );
 
 if(isset($_POST['search']['value']))
 {
 	$search_value = $_POST['search']['value'];
-	$sql .= " WHERE estado like '%".$search_value."%'";
-	$sql .= " OR nombre_usuario like '%".$search_value."%'";
-	$sql .= " OR fecha_envio like '%".$search_value."%'";
+	$sql .= " WHERE id_paquete like '%".$search_value."%'";
+	$sql .= " OR fecha_envio like '%".$search_value."%'";	
+	$sql .= " OR fecha_aprobacion like '%".$search_value."%'";	
 	$sql .= " OR estado_aprobacion like '%".$search_value."%'";
 }
 
@@ -34,7 +31,7 @@ if(isset($_POST['order']))
 }
 else
 {
-	$sql .= " ORDER BY fecha_envio desc";
+	$sql .= " ORDER BY id_paquete desc";
 }
 
 if($_POST['length'] != -1)
@@ -50,18 +47,13 @@ $data = array();
 while($row = mysqli_fetch_assoc($query))
 {
 	$sub_array = array();
-	$sub_array[] = $row['id_paquete'];
-	$sub_array[] = $row['estado'];
+	$sub_array[] = $row['id_paquete'];	
 	$sub_array[] = $row['fecha_envio'];
-	$sub_array[] = $row['nombre_usuario'];
 	$sub_array[] = $row['estado_aprobacion'];
 	$sub_array[] = $row['fecha_aprobacion'];
 	$sub_array[] = $row['numero_beneficiarios'];
-	$sub_array[] = $row['observaciones'];
-	
-	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm editbtn" style="text-align: center; display: inline-block; width: 100%;">Edit</a>';
-	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm downloadbtn" style="text-align: center; width: 100%;">Download</a>';
-	
+	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm downloadbtn" style="text-align: center; display: inline-block; width: 100%; ">JET PERU</a>';
+	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm tppbtn" style="text-align: center; display: inline-block; width: 100%; ">TPP</a>';
 	$data[] = $sub_array;
 }
 

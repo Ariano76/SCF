@@ -21,7 +21,7 @@ include("../administrador/config/connection.php");
   <!--div class="btnAdd">
     <a href="#!" data-id="" data-bs-toggle="modal" data-bs-target="#addUserModal" class="btn btn-success btn-lg">Agregar Nuevo Item</a>
   </div-->
-  <table id="tablaUsuarios" class="table table-striped table-bordered table-condensed w-auto nowrap" style="width:100%">
+  <table id="tablaUsuarios" class="table table-striped table-bordered table-condensed w-auto nowrap small" style="width:100%">
     <thead class="text-center">
       <tr>
         <th>Codigo</th>
