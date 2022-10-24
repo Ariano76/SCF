@@ -43,13 +43,9 @@ BEGIN
 	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
 	where estados.id_estado = 1 and b.region_beneficiario=depa and 
-    b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+    b.id_beneficiario not in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
 	inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
-	where fpa.id_estado = 4 and fpd.id_beneficiario not in (
-	SELECT fpd.id_beneficiario FROM bd_bha_sci.finanzas_paquete_detalle as fpd
-	inner join finanzas_paquete_aprobacion as fpa on fpd.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-	where fpa.id_estado = 2 )
+	where fpa.id_estado in (2,3)
     );
 END |
 DELIMITER ;
@@ -73,13 +69,9 @@ BEGIN
 	inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
 	where estados.id_estado = 1 and b.region_beneficiario = depa and 
-    b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+    b.id_beneficiario not in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
 	inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
-	where fpa.id_estado = 4 and fpd.id_beneficiario not in (
-	SELECT fpd.id_beneficiario FROM bd_bha_sci.finanzas_paquete_detalle as fpd
-	inner join finanzas_paquete_aprobacion as fpa on fpd.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-	where fpa.id_estado = 2 ));
+	where fpa.id_estado in (2,3));
     
     SET @usuario = Codigo_User(usuario);
     
@@ -93,13 +85,9 @@ BEGIN
 		inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 		inner join estados on estados.id_estado = est.id_estado 
 		where estados.id_estado = 1 and b.region_beneficiario = depa and 
-		b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+		b.id_beneficiario not in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
 		inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
-		where fpa.id_estado = 4 and fpd.id_beneficiario not in (
-		SELECT fpd.id_beneficiario FROM bd_bha_sci.finanzas_paquete_detalle as fpd
-		inner join finanzas_paquete_aprobacion as fpa on fpd.id_paquete = fpa.id_paquete
-		inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-		where fpa.id_estado = 2 ));
+		where fpa.id_estado in (2,3));
         
         /* estado = 2 (pendiente) */
         insert into finanzas_paquete_aprobacion(id_paquete, id_estado, id_usuario_envio) 
@@ -119,13 +107,9 @@ BEGIN
 	FROM beneficiario b inner join estatus est on b.id_beneficiario = est.id_beneficiario 
 	inner join estados on estados.id_estado = est.id_estado 
 	where estados.id_estado = 1 and 
-	b.id_beneficiario in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
+	b.id_beneficiario not in (select fpd.id_beneficiario from finanzas_paquete_detalle fpd
 	inner join finanzas_paquete_aprobacion fpa on fpd.id_paquete = fpa.id_paquete
-	where fpa.id_estado = 4 and fpd.id_beneficiario not in (
-	SELECT fpd.id_beneficiario FROM bd_bha_sci.finanzas_paquete_detalle as fpd
-	inner join finanzas_paquete_aprobacion as fpa on fpd.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-	where fpa.id_estado = 2 )) 
+	where fpa.id_estado in (2,3) ) 
 	order by b.region_beneficiario;
 END |
 DELIMITER ;
@@ -154,13 +138,13 @@ BEGIN
     if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
     if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
     if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1 as 'numero de personas en la familia',
-    c.tiene_los_siguientes_medios_comunicacion, c.como_accede_a_internet, 
     F_SINO(dersec.interesado_participar_nutricion) as interesado_participar_nutricion, 
     IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
     and (c.como_accede_a_internet="Por wifi  por horas" 
     or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
     or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
     or c.como_accede_a_internet="Ninguna de las anteriores"),"SI","NO") as bono_nutricion,
+    c.como_accede_a_internet, c.tiene_los_siguientes_medios_comunicacion, 
     IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
     and (c.como_accede_a_internet="Por wifi  por horas" 
     or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
@@ -230,11 +214,26 @@ BEGIN
 END |
 DELIMITER ;
 
+
+call SP_reporte_recarga_tpp(7);
+
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp`;
 DELIMITER |
 CREATE PROCEDURE `SP_reporte_recarga_tpp`(in codpaquete int)
 BEGIN
-	select null as Refeplanilla, null as agencia, null as orden, null as fecha,	null as monto, 
+	select null as Refeplanilla, null as agencia, null as orden, curdate() as fecha,	
+    CASE if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+    if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+    if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+    if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+     WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+     WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+     WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+     WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+     WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+     ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	END AS 'monto',
+    -- null as monto, 
     'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
 	'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
 	20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
@@ -274,7 +273,8 @@ BEGIN
     inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
 	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
 	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
-	where fpa.id_estado = 3;
+    inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
+	where fpa.id_paquete = codpaquete;
 END |
 DELIMITER ;
 

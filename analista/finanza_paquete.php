@@ -16,9 +16,11 @@ include("../administrador/config/connection.php");
         <th>Fecha&nbsp;de&nbsp;envio</th>
         <th>Estado</th>
         <th>Fecha&nbsp;de&nbsp;aprobación</th>
-        <th>N°&nbsp;de&nbsp;beneficiarios</th>
-        <th>Tarjeta 1</th>
-        <th>Tarjeta 2</th>
+        <th>Beneficiarios</th>
+        <th>Tarjeta1a</th>
+        <th>Tarjeta1b</th>
+        <th>Tarjeta2a</th>
+        <th>Tarjeta2b</th>
       </tr>
     </thead>
   </table>   
@@ -40,7 +42,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [6]
+        "aTargets": [8]
       },
       ]
     });
