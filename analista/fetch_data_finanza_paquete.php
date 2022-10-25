@@ -52,10 +52,10 @@ while($row = mysqli_fetch_assoc($query))
 	$sub_array[] = $row['estado_aprobacion'];
 	$sub_array[] = $row['fecha_aprobacion'];
 	$sub_array[] = $row['numero_beneficiarios'];
-	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm downloadbtn" style="text-align: center; display: inline-block; width: 100%; ">JET PERU</a>';
-	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm downloadbtn" style="text-align: center; display: inline-block; width: 100%; ">JET+Bono</a>';
+	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm jetperubtn" style="text-align: center; display: inline-block; width: 100%; ">JET PERU</a>';
+	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm jetperubonobtn" style="text-align: center; display: inline-block; width: 100%; ">JET+Bono</a>';
 	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm tppbtn" style="text-align: center; display: inline-block; width: 100%; ">TPP</a>';
-	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm tppbtn" style="text-align: center; display: inline-block; width: 100%; ">TPP+Bono</a>';
+	$sub_array[] = '<a href="#!;" data-id="'.$row['id_paquete'].'" class="btn btn-info btn-sm tppbonobtn" style="text-align: center; display: inline-block; width: 100%; ">TPP+Bono</a>';
 	$data[] = $sub_array;
 }
 

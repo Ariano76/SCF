@@ -48,7 +48,7 @@ include("../administrador/config/connection.php");
     });
   });
   // codigo para descargar el formato TPP
-  $('#tablaUsuarios').on('click', '.downloadbtn', function(e) {
+  $('#tablaUsuarios').on('click', '.jetperubtn', function(e) {
     e.preventDefault();
     var trid = $('#trid').val();
     //var id = $('#id').val();
@@ -64,7 +64,7 @@ include("../administrador/config/connection.php");
         window.open('repo_finanza_jetperu.php?id='+id,'_blank' ); 
       }
     });
-  });  
+  }); 
 
 </script>
 
