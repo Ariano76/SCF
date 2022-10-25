@@ -192,9 +192,10 @@ document.addEventListener("DOMContentLoaded", function(){
 						<li>
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Proveedores de Pago</a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/analista/finanza_paquete.php" ?>">Reporte</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/finanza_paquete.php" ?>">Recarga Tarjetas</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">TPP</a>
+								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Reporte JET PERU</a>
+								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Reporte TPP</a>
 							</div>
 						</li>
 						<li>

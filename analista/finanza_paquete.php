@@ -47,13 +47,12 @@ include("../administrador/config/connection.php");
       ]
     });
   });
-  // codigo para descargar el formato TPP
+  // codigo para descargar el formato JETPERU
   $('#tablaUsuarios').on('click', '.jetperubtn', function(e) {
     e.preventDefault();
     var trid = $('#trid').val();
     //var id = $('#id').val();
     var id = $(this).data('id');    
-    //$('#downloadModal').modal('show');
     $.ajax({
       url: "repo_finanza_jetperu.php",
       type: "get",
@@ -62,6 +61,53 @@ include("../administrador/config/connection.php");
       },
       success: function(data) {
         window.open('repo_finanza_jetperu.php?id='+id,'_blank' ); 
+      }
+    });
+  }); 
+  // codigo para descargar el formato JETPERU + BONO CONECTIVIDAD
+  $('#tablaUsuarios').on('click', '.jetperubonobtn', function(e) {
+    e.preventDefault();
+    var trid = $('#trid').val();
+    //var id = $('#id').val();
+    var id = $(this).data('id');    
+    $.ajax({
+      url: "repo_finanza_jetperu_mas_conectividad.php",
+      type: "get",
+      data: {
+        id: id
+      },
+      success: function(data) {
+        window.open('repo_finanza_jetperu_mas_conectividad.php?id='+id,'_blank' ); 
+      }
+    });
+  });
+  // codigo para descargar el formato TPP
+  $('#tablaUsuarios').on('click', '.tppbtn', function(e) {
+    e.preventDefault();
+    var id = $(this).data('id');    
+    $.ajax({
+      url: "repo_finanza_tpp.php",
+      type: "get",
+      data: {
+        id: id
+      },
+      success: function(data) {
+        window.open('repo_finanza_tpp.php?id='+id,'_blank' ); 
+      }
+    });
+  }); 
+  // codigo para descargar el formato TPP mas CONECTIVIDAD
+  $('#tablaUsuarios').on('click', '.tppbonobtn', function(e) {
+    e.preventDefault();
+    var id = $(this).data('id');    
+    $.ajax({
+      url: "repo_finanza_tpp_mas_conectividad.php",
+      type: "get",
+      data: {
+        id: id
+      },
+      success: function(data) {
+        window.open('repo_finanza_tpp_mas_conectividad.php?id='+id,'_blank' ); 
       }
     });
   }); 

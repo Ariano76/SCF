@@ -18,7 +18,7 @@ require_once ('../vendor/autoload.php');
   $dt = date('Y-m-d H:i:s');
   $timestamp1 = strtotime($dt);
   //$db_1->cotejo($timestamp1);
-  $usuarios = $db_1->select_repo_all("SP_reporte_recarga_jetperu", $codigo);
+  $usuarios = $db_1->select_repo_all("SP_reporte_recarga_jetperu_mas_bono", $codigo);
 
   $spreadsheet = new Spreadsheet();
   $sheet = $spreadsheet->getActiveSheet();
@@ -110,7 +110,7 @@ require_once ('../vendor/autoload.php');
     $i++;
   }
   $writer = new Xlsx($spreadsheet);
-  $fileName = "Reporte_recarga_jetperu_" . $timestamp1 . ".xlsx";
+  $fileName = "Reporte_recarga_jetperu_mas_conectividad_" . $timestamp1 . ".xlsx";
   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
   header('Cache-Control: max-age=0');
