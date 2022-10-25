@@ -19,6 +19,7 @@ DROP TABLE if exists finanzas_estados;
 DROP TABLE if exists finanzas_bono_conectividad;
 DROP TABLE if exists finanzas_bono_familiar;
 DROP TABLE if exists finanzas_tipo_documento;
+DROP TABLE if exists finanzas_stage_jetperu;
 
 /*********************************
 -- CREACION DE TABLAS 
@@ -83,7 +84,29 @@ CREATE TABLE finanzas_tipo_documento
     PRIMARY KEY (id_tipo_documento)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
-
+CREATE TABLE finanzas_stage_jetperu
+(	id_integrantes       	INTEGER NOT NULL AUTO_INCREMENT,
+	fecha	            	VARCHAR(15) NULL,
+    nro_planilla            VARCHAR(50) NULL,
+    nro_orden            	VARCHAR(10) NULL,
+	region            		VARCHAR(50) NULL,
+	apellidos_beneficiario	VARCHAR(50) NULL,
+	nombres_beneficario		VARCHAR(50) NULL,
+	tipo_documento			VARCHAR(50) NULL,
+	documento_identidad   	VARCHAR(50) NULL,
+	monto           		VARCHAR(50) NULL,
+	estado               	VARCHAR(50) NULL,
+	lugar_pago 				VARCHAR(50) NULL,
+	fecha_pago 				VARCHAR(15) NULL,
+	hora_pago            	VARCHAR(15) NULL,
+	telefono_benef          VARCHAR(50) NULL,
+	codigo_interno          VARCHAR(50) NULL,
+	codSeguimiento          VARCHAR(50) NULL,
+	nro_tarjeta             VARCHAR(50) NULL,
+	tipo_transferencia   	VARCHAR(50) NULL,
+	donante           		VARCHAR(50) NULL,
+    PRIMARY KEY (id_integrantes)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
