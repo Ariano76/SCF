@@ -20,6 +20,7 @@ DROP TABLE if exists finanzas_bono_conectividad;
 DROP TABLE if exists finanzas_bono_familiar;
 DROP TABLE if exists finanzas_tipo_documento;
 DROP TABLE if exists finanzas_stage_jetperu;
+DROP TABLE if exists finanzas_reporte_jetperu;
 
 /*********************************
 -- CREACION DE TABLAS 
@@ -107,6 +108,31 @@ CREATE TABLE finanzas_stage_jetperu
 	donante           		VARCHAR(50) NULL,
     nom_usuario           	VARCHAR(50) NULL,
     PRIMARY KEY (id_stage_jetperu)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_reporte_jetperu
+(	id_jetperu				INT NOT NULL AUTO_INCREMENT,
+	fecha	            	date NULL,
+    nro_planilla            VARCHAR(50) NULL,
+    nro_orden            	INT NULL,
+	region            		VARCHAR(50) NULL,
+	apellidos_beneficiario	VARCHAR(50) NULL,
+	nombres_beneficario		VARCHAR(50) NULL,
+	tipo_documento			VARCHAR(50) NULL,
+	documento_identidad   	VARCHAR(50) NULL,
+	monto           		DECIMAL(6,2) NULL,
+	estado               	VARCHAR(50) NULL,
+	lugar_pago 				VARCHAR(50) NULL,
+	fecha_pago 				DATE NULL,
+	hora_pago            	TIME NULL,
+	telefono_benef          VARCHAR(50) NULL,
+	codigo_interno          INT NULL,
+	codSeguimiento          VARCHAR(50) NULL,
+	nro_tarjeta             VARCHAR(50) NULL,
+	tipo_transferencia   	VARCHAR(50) NULL,
+	donante           		VARCHAR(50) NULL,
+    nom_usuario           	VARCHAR(50) NULL,
+    PRIMARY KEY (id_jetperu)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 /*********************************

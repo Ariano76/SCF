@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function(){
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Reporte JET PERU</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos.php" ?>">Limpiar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Migrar datos</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Reporte TPP</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Limpiar datos</a>

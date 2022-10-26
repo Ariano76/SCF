@@ -212,6 +212,30 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_migrar_data_jetperu`;
+DELIMITER |
+CREATE PROCEDURE `SP_migrar_data_jetperu`(IN usuario varchar(50), OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN     -- ERROR
+		SET success = 0;
+		ROLLBACK;
+	END;
+ 
+	START TRANSACTION;
+	 INSERT INTO finanzas_reporte_jetperu ( fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
+     nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, 
+     telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) 
+     SELECT fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
+     nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, 
+     IF (TIME_FORMAT(hora_pago, '%T') IS NULL, null, TIME_FORMAT(hora_pago, '%T')), 
+     telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario
+     from finanzas_stage_jetperu ;	
+    -- ALTER TABLE resultado_proyectos AUTO_INCREMENT = 1;
+    SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
 DELIMITER |
