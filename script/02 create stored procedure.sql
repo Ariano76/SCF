@@ -114,8 +114,6 @@ BEGIN
 END |
 DELIMITER ;
 
-call SP_reporte_finanzas_valorizacion(7);
-
 DROP PROCEDURE IF EXISTS `SP_reporte_finanzas_valorizacion`;
 DELIMITER |
 CREATE PROCEDURE `SP_reporte_finanzas_valorizacion`(in codpaquete int)
@@ -170,105 +168,68 @@ BEGIN
 END |
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `SP_reporte_recarga_jetperu`;
+DROP PROCEDURE IF EXISTS `SP_limpiar_stage_jetperu`;
 DELIMITER |
-CREATE PROCEDURE `SP_reporte_recarga_jetperu`(in codpaquete int)
+CREATE PROCEDURE `SP_limpiar_stage_jetperu`(in usuario varchar(50), OUT success INT)
 BEGIN
-	select null as Refeplanilla, null as agencia, null as orden, curdate() as fecha,	    
-    bono_familiar(fpd.id_beneficiario) as monto,
-    'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
-	'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
-	20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
-	null as tlfmovilremite, 'AV JAVIER PRADO OESTE 890' as domicremite, 'SAN ISIDRO' as	ciudadremite,
-	'LIMA' as estadoremite, b.primer_apellido as apepatbenef, b.segundo_apellido as apematbenef, 
-    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombbenef, 
-    CASE b.documentos_fisico_original 
-     WHEN 'Primero' THEN '8 - Cedula'
-     WHEN 'Segundo' THEN 
-		case b.tipo_identificacion
-			when 'DNI' then '1 - DNI'
-            when 'CPP' then '3 - CPP'
-            when 'Carnet de Extranjeria' then '4 - Carnet de Extranjeria'
-            when 'Pasaporte' then '6 - Pasaporte'
-            when 'PTP' then '7 - PTP'
-            when 'Cedula' then '8 - Cedula'
-            when 'Carnet de Refugiado' then '9 - Carné de Refugiado'
-            else '2 - Otro'
-		end
-     WHEN 'Ninguno' THEN '8 - Cedula'
-     ELSE '8 - Cedula'
-	END AS 'tipoidbenef', 
-    CASE b.documentos_fisico_original
+	DECLARE exit handler for sqlexception
+	BEGIN
+		SET success = 0; -- ERROR
+	ROLLBACK;
+	END;
+	START TRANSACTION;
+		delete from finanzas_stage_jetperu where nom_usuario = usuario;        
+        SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `SP_finanzas_clean_trim`;
+DELIMITER |
+CREATE PROCEDURE `SP_finanzas_clean_trim`(OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN     -- ERROR
+		SET success = 0;
+	ROLLBACK;
+	END;
+ 
+	START TRANSACTION;
+	UPDATE finanzas_stage_jetperu SET 
+    fecha=TRIM(fecha), nro_planilla=TRIM(nro_planilla), nro_orden=TRIM(nro_orden), region=TRIM(region), 
+    apellidos_beneficiario=TRIM(apellidos_beneficiario), nombres_beneficario=TRIM(nombres_beneficario), 
+    tipo_documento=TRIM(tipo_documento), documento_identidad=TRIM(documento_identidad), monto=TRIM(monto),
+    estado=TRIM(estado), lugar_pago=TRIM(lugar_pago), fecha_pago=TRIM(fecha_pago), hora_pago=TRIM(hora_pago),
+    telefono_benef=TRIM(telefono_benef), codigo_interno=TRIM(codigo_interno), codSeguimiento=TRIM(codSeguimiento), 
+    nro_tarjeta=TRIM(nro_tarjeta), tipo_transferencia=TRIM(tipo_transferencia), donante=TRIM(donante),
+    -- fecha = user_regex_replace('[.]', '', fecha), fecha_pago = user_regex_replace('[.]', '', fecha_pago),
+    fecha_pago = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fecha_pago, CHAR(10), ''), CHAR(13), ''), CHAR(9), ''), CHAR(160), ''),CHAR(32), ''),
+    fecha = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fecha, CHAR(10), ''), CHAR(13), ''), CHAR(9), ''), CHAR(160), ''),CHAR(32), ''),
+    fecha = SUBSTRING(fecha, 2, 10), fecha_pago = SUBSTRING(fecha_pago, 2, 10);
+    SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_recarga_tpp_mas_bono`(in codpaquete int)
+BEGIN
+	select CASE b.documentos_fisico_original
      WHEN 'Primero' THEN b.numero_cedula
      WHEN 'Segundo' THEN b.numero_identificacion
      WHEN 'Ninguno' THEN b.numero_cedula
      ELSE b.numero_cedula
-	END AS 'nroidbenef', 
-    null as nacionbenef, null as 'residebenef', c.cual_es_su_numero_whatsapp as tlffijobenef, 
-    c.cual_es_su_numero_recibir_sms as tlfmovilbenef, c.cual_es_su_direccion as domicbenef,
-    b.en_que_provincia as ciudadbenef,	b.en_que_provincia as estadobenef,
-    null as nombrebanco, null as cuentabanco, null as tipocuenta, null as emailremite, null as emailbenef,
-	null as codint, null as	codseguim, null as numtjt
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-    inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
+	END AS 'numero_documento', b.primer_apellido as apepat, b.segundo_apellido as apemat, 
+    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombres, null as Numero_de_Tarjeta,
+    bono_familiar(fpd.id_beneficiario) + bono_conectividad(fpd.id_beneficiario) as monto, null as Numero_de_Operacion
+	from finanzas_paquete as fp inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
 	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
-	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
-    inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
-	where fpa.id_paquete = codpaquete;
+	where fpd.id_paquete = codpaquete;
 END |
 DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `SP_reporte_recarga_jetperu_mas_bono`;
-DELIMITER |
-CREATE PROCEDURE `SP_reporte_recarga_jetperu_mas_bono`(in codpaquete int)
-BEGIN
-	select null as Refeplanilla, null as agencia, null as orden, curdate() as fecha,	    
-    bono_familiar(fpd.id_beneficiario) + bono_conectividad(fpd.id_beneficiario) as monto,
-    'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
-	'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
-	20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
-	null as tlfmovilremite, 'AV JAVIER PRADO OESTE 890' as domicremite, 'SAN ISIDRO' as	ciudadremite,
-	'LIMA' as estadoremite, b.primer_apellido as apepatbenef, b.segundo_apellido as apematbenef, 
-    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombbenef, 
-    CASE b.documentos_fisico_original 
-     WHEN 'Primero' THEN '8 - Cedula'
-     WHEN 'Segundo' THEN 
-		case b.tipo_identificacion
-			when 'DNI' then '1 - DNI'
-            when 'CPP' then '3 - CPP'
-            when 'Carnet de Extranjeria' then '4 - Carnet de Extranjeria'
-            when 'Pasaporte' then '6 - Pasaporte'
-            when 'PTP' then '7 - PTP'
-            when 'Cedula' then '8 - Cedula'
-            when 'Carnet de Refugiado' then '9 - Carné de Refugiado'
-            else '2 - Otro'
-		end
-     WHEN 'Ninguno' THEN '8 - Cedula'
-     ELSE '8 - Cedula'
-	END AS 'tipoidbenef', 
-    CASE b.documentos_fisico_original
-     WHEN 'Primero' THEN b.numero_cedula
-     WHEN 'Segundo' THEN b.numero_identificacion
-     WHEN 'Ninguno' THEN b.numero_cedula
-     ELSE b.numero_cedula
-	END AS 'nroidbenef', 
-    null as nacionbenef, null as 'residebenef', c.cual_es_su_numero_whatsapp as tlffijobenef, 
-    c.cual_es_su_numero_recibir_sms as tlfmovilbenef, c.cual_es_su_direccion as domicbenef,
-    b.en_que_provincia as ciudadbenef,	b.en_que_provincia as estadobenef,
-    null as nombrebanco, null as cuentabanco, null as tipocuenta, null as emailremite, null as emailbenef,
-	null as codint, null as	codseguim, null as numtjt
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-    inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
-	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
-	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
-    inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
-	where fpa.id_paquete = codpaquete;
-END |
-DELIMITER ;
-
-call SP_reporte_recarga_tpp(1);
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp`;
 DELIMITER |
@@ -288,23 +249,113 @@ BEGIN
 END |
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
+DROP PROCEDURE IF EXISTS `SP_reporte_recarga_jetperu_mas_bono`;
 DELIMITER |
-CREATE PROCEDURE `SP_reporte_recarga_tpp_mas_bono`(in codpaquete int)
+CREATE PROCEDURE `SP_reporte_recarga_jetperu_mas_bono`(in codpaquete int)
 BEGIN
-	select CASE b.documentos_fisico_original
+	select null as Refeplanilla, null as agencia, null as orden, curdate() as fecha,	    
+    bono_familiar(fpd.id_beneficiario) + bono_conectividad(fpd.id_beneficiario) as monto,
+    'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
+	'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
+	20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
+	null as tlfmovilremite, 'AV JAVIER PRADO OESTE 890' as domicremite, 'SAN ISIDRO' as	ciudadremite,
+	'LIMA' as estadoremite, b.primer_apellido as apepatbenef, b.segundo_apellido as apematbenef, 
+    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombbenef, 
+    CASE b.documentos_fisico_original 
+     WHEN 'Primero' THEN '8 - Cedula'
+     WHEN 'Segundo' THEN 
+		CASE b.tipo_identificacion
+			WHEN 'DNI' THEN '1 - DNI'
+            WHEN 'CPP' THEN '3 - CPP'
+            WHEN 'Carnet de Extranjeria' THEN '4 - Carnet de Extranjeria'
+            WHEN 'Pasaporte' THEN '6 - Pasaporte'
+            WHEN 'PTP' THEN '7 - PTP'
+            WHEN 'Cedula' THEN '8 - Cedula'
+            WHEN 'Carnet de Refugiado' THEN '9 - Carné de Refugiado'
+            ELSE '2 - Otro'
+		END
+     WHEN 'Ninguno' THEN '8 - Cedula'
+     ELSE '8 - Cedula'
+	END AS tipoidbenef, 
+    CASE b.documentos_fisico_original
      WHEN 'Primero' THEN b.numero_cedula
      WHEN 'Segundo' THEN b.numero_identificacion
      WHEN 'Ninguno' THEN b.numero_cedula
      ELSE b.numero_cedula
-	END AS 'numero_documento', b.primer_apellido as apepat, b.segundo_apellido as apemat, 
-    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombres, null as Numero_de_Tarjeta,
-    bono_familiar(fpd.id_beneficiario) + bono_conectividad(fpd.id_beneficiario) as monto, null as Numero_de_Operacion
-	from finanzas_paquete as fp inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+	END AS nroidbenef, 
+    null as nacionbenef, null as 'residebenef', c.cual_es_su_numero_whatsapp as tlffijobenef, 
+    c.cual_es_su_numero_recibir_sms as tlfmovilbenef, c.cual_es_su_direccion as domicbenef,
+    b.en_que_provincia as ciudadbenef,	b.en_que_provincia as estadobenef,
+    null as nombrebanco, null as cuentabanco, null as tipocuenta, null as emailremite, null as emailbenef,
+	null as codint, null as	codseguim, null as numtjt
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
 	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
-	where fpd.id_paquete = codpaquete;
+	inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
+    inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
+	where fpa.id_paquete = codpaquete;
 END |
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `SP_reporte_recarga_jetperu`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_recarga_jetperu`(in codpaquete int)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN
+     -- ERROR
+	ROLLBACK;
+	END;
+    
+	START TRANSACTION;    
+	 select null as Refeplanilla, null as agencia, null as orden, curdate() as fecha,	    
+     bono_familiar(fpd.id_beneficiario) as monto,
+     'PEN' as moneda, 'O' as canalpago, '010-020' as	agenciadestino, 'SAVE' as apepatremite,
+	 'THE CHILDREN' as apematremite, 'INTERNATIONAL' as nombremite, '5 - Ruc' as	tipoidremite,
+	 20547444125 as nroidremite, 'PER' as nacionremite, 'PER' as resideremite, null as tlffijoremite,
+	 null as tlfmovilremite, 'AV JAVIER PRADO OESTE 890' as domicremite, 'SAN ISIDRO' as	ciudadremite,
+	 'LIMA' as estadoremite, b.primer_apellido as apepatbenef, b.segundo_apellido as apematbenef, 
+     concat(b.primer_nombre, ' ', b.segundo_nombre) as nombbenef, 
+     CASE b.documentos_fisico_original 
+      WHEN 'Primero' THEN '8 - Cedula'
+      WHEN 'Segundo' THEN 
+		case b.tipo_identificacion
+			when 'DNI' then '1 - DNI'
+            when 'CPP' then '3 - CPP'
+            when 'Carnet de Extranjeria' then '4 - Carnet de Extranjeria'
+            when 'Pasaporte' then '6 - Pasaporte'
+            when 'PTP' then '7 - PTP'
+            when 'Cedula' then '8 - Cedula'
+            when 'Carnet de Refugiado' then '9 - Carné de Refugiado'
+            else '2 - Otro'
+		end
+      WHEN 'Ninguno' THEN '8 - Cedula'
+     ELSE '8 - Cedula'
+	 END AS 'tipoidbenef', 
+     CASE b.documentos_fisico_original
+      WHEN 'Primero' THEN b.numero_cedula
+      WHEN 'Segundo' THEN b.numero_identificacion
+      WHEN 'Ninguno' THEN b.numero_cedula
+      ELSE b.numero_cedula
+	 END AS 'nroidbenef', 
+     null as nacionbenef, null as 'residebenef', c.cual_es_su_numero_whatsapp as tlffijobenef, 
+     c.cual_es_su_numero_recibir_sms as tlfmovilbenef, c.cual_es_su_direccion as domicbenef,
+     b.en_que_provincia as ciudadbenef,	b.en_que_provincia as estadobenef, null as nombrebanco, 
+     null as cuentabanco, null as tipocuenta, null as emailremite, null as emailbenef,
+	 null as codint, null as codseguim, null as numtjt
+	 from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	 inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+     inner join finanzas_estados as fe on fpa.id_estado = fe.id_estado
+	 inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
+	 inner join comunicacion c on fpd.id_beneficiario = c.id_beneficiario
+     inner join integrantes i on fpd.id_beneficiario = i.id_beneficiario 
+	 where fpa.id_paquete = codpaquete;
+	COMMIT;
+END |
+DELIMITER ;
+
 
 
 /*********************************
@@ -355,7 +406,6 @@ BEGIN
 END |
 DELIMITER ;
 
-
 DROP FUNCTION IF EXISTS `bono_conectividad`;
 DELIMITER |
 CREATE FUNCTION `bono_conectividad`(codbenficiario int) RETURNS decimal(5,2)
@@ -377,6 +427,7 @@ BEGIN
     END IF;
 END |
 DELIMITER ;
+
 
 
 

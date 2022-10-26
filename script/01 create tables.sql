@@ -85,10 +85,10 @@ CREATE TABLE finanzas_tipo_documento
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 CREATE TABLE finanzas_stage_jetperu
-(	id_integrantes       	INTEGER NOT NULL AUTO_INCREMENT,
-	fecha	            	VARCHAR(15) NULL,
+(	id_stage_jetperu       	INTEGER NOT NULL AUTO_INCREMENT,
+	fecha	            	VARCHAR(50) NULL,
     nro_planilla            VARCHAR(50) NULL,
-    nro_orden            	VARCHAR(10) NULL,
+    nro_orden            	VARCHAR(50) NULL,
 	region            		VARCHAR(50) NULL,
 	apellidos_beneficiario	VARCHAR(50) NULL,
 	nombres_beneficario		VARCHAR(50) NULL,
@@ -97,15 +97,16 @@ CREATE TABLE finanzas_stage_jetperu
 	monto           		VARCHAR(50) NULL,
 	estado               	VARCHAR(50) NULL,
 	lugar_pago 				VARCHAR(50) NULL,
-	fecha_pago 				VARCHAR(15) NULL,
-	hora_pago            	VARCHAR(15) NULL,
+	fecha_pago 				VARCHAR(50) NULL,
+	hora_pago            	VARCHAR(50) NULL,
 	telefono_benef          VARCHAR(50) NULL,
 	codigo_interno          VARCHAR(50) NULL,
 	codSeguimiento          VARCHAR(50) NULL,
 	nro_tarjeta             VARCHAR(50) NULL,
 	tipo_transferencia   	VARCHAR(50) NULL,
 	donante           		VARCHAR(50) NULL,
-    PRIMARY KEY (id_integrantes)
+    nom_usuario           	VARCHAR(50) NULL,
+    PRIMARY KEY (id_stage_jetperu)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 /*********************************

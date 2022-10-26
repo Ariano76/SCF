@@ -1,11 +1,11 @@
-<?php include("administrador/template/cabecera.php"); ?>
+<?php include("../administrador/template/cabecera.php"); ?>
 
 <?php
 use Phppot\DataSource;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-require_once './administrador/config/bd.php';
-require_once './administrador/config/bdPDO.php';
+require_once '../administrador/config/bd.php';
+require_once '../administrador/config/bdPDO.php';
 $db = new DataSource();
 $conn = $db->getConnection();
 
@@ -14,7 +14,7 @@ $conn_1 = $db_1->Connect();
 
 //echo $insertId;
 
-require_once ('./vendor/autoload.php');
+require_once ('../vendor/autoload.php');
 
 if (isset($_POST["import"])) {
 
@@ -28,7 +28,7 @@ if (isset($_POST["import"])) {
 
   if (in_array($_FILES["file"]["type"], $allowedFileType)) {
 
-    $targetPath = 'uploads/' . $_FILES['file']['name'];
+    $targetPath = '../uploads/' . $_FILES['file']['name'];
     move_uploaded_file($_FILES['file']['tmp_name'], $targetPath);
 
     $Reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -38,7 +38,7 @@ if (isset($_POST["import"])) {
     $spreadSheetAry = $excelSheet->toArray();
     $sheetCount = count($spreadSheetAry);
 
-    $insertId = $db_1->limpiarStage("SP_LimpiarTablaStage",$nombreUsuario);
+    $insertId = $db_1->limpiarStage("SP_limpiar_stage_jetperu",$nombreUsuario);
     $conta=0;
     //for ($i = 0; $i <= $sheetCount; $i ++) {
     for ($i = 1; $i < $sheetCount; $i ++) {
@@ -101,11 +101,10 @@ if (isset($_POST["import"])) {
             $dato_19  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][18]); }
       if (
         ! empty($dato_01) || ! empty($dato_02) || ! empty($dato_03) || ! empty($dato_04) || ! empty($dato_05) || ! empty($dato_06) || ! empty($dato_07) || ! empty($dato_08) || ! empty($dato_09) || ! empty($dato_10) || ! empty($dato_11) || ! empty($dato_12) || ! empty($dato_13) || ! empty($dato_14) || ! empty($dato_15) || ! empty($dato_16) || ! empty($dato_17) || ! empty($dato_18) || ! empty($dato_19) ) {
-        $query = "insert into finanzas_stage_jetperu(dato_01, dato_02, dato_03, dato_04, dato_05, dato_06, dato_07, dato_08, dato_09, dato_10, dato_11, dato_12, dato_13, dato_14, dato_15, dato_16, dato_17, dato_18, dato_19) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $paramType = "sssssssssssssssssss";
+        $query = "insert into finanzas_stage_jetperu(fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $paramType = "ssssssssssssssssssss";
         $paramArray = array(
-          $dato_01, $dato_02, $dato_03, $dato_04, $dato_05, $dato_06, $dato_07, $dato_08, $dato_09, $dato_10, $dato_11, $dato_12, $dato_13, $dato_14, $dato_15, $dato_16, $dato_17, $dato_18, $dato_19, $nombreUsuario
-        );
+            $dato_01, $dato_02, $dato_03, $dato_04, $dato_05, $dato_06, $dato_07, $dato_08, $dato_09, $dato_10, $dato_11, $dato_12, $dato_13, $dato_14, $dato_15, $dato_16, $dato_17, $dato_18, $dato_19, $nombreUsuario);
         $insertId = $db->insert($query, $paramType, $paramArray);
         $conta++;
 
@@ -156,4 +155,4 @@ if (isset($_POST["import"])) {
 </div>
 
 
-<?php include("administrador/template/pie.php"); ?>
+<?php include("../administrador/template/pie.php"); ?>
