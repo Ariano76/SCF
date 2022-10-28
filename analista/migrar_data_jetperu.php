@@ -7,21 +7,13 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 require_once ('../administrador/config/bdPDO.php');
 
 $db_1 = new TransactionSCI();
-$contperiodos = 0;
-$xperiodos = "";
 
 require_once ('../vendor/autoload.php');
 
 if (isset($_POST["import"])) {
   $type = "success";
   
-  $dt = date('Y-m-d H:i:s');
-  $timestamp1 = strtotime($dt);
-
-  $check = $_POST["flexRadioDefault"];
-  $xper = $_POST["txtPeriodos"];
-
-  $var = $db_1->migrar_data_gerencia($check, $xper);
+  $var = $db_1->migrar_data_reporte_tarjetas("SP_migrar_data_jetperu", $nombreUsuario);
   //echo "<script>console.log('entre al IF var: " . $var . "');</script>"; 
   if (!empty($var) && $var == 1) { 
       //echo "<script>console.log('entre al IF 1: " . $var . "');</script>"; 

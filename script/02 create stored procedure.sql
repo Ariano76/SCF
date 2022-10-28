@@ -206,7 +206,7 @@ BEGIN
     -- fecha = user_regex_replace('[.]', '', fecha), fecha_pago = user_regex_replace('[.]', '', fecha_pago),
     fecha_pago = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fecha_pago, CHAR(10), ''), CHAR(13), ''), CHAR(9), ''), CHAR(160), ''),CHAR(32), ''),
     fecha = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fecha, CHAR(10), ''), CHAR(13), ''), CHAR(9), ''), CHAR(160), ''),CHAR(32), ''),
-    fecha = SUBSTRING(fecha, 2, 10), fecha_pago = SUBSTRING(fecha_pago, 2, 10);
+    fecha = SUBSTRING(fecha, 2, 10), fecha_pago = SUBSTRING(fecha_pago, 2, 10), monto = REPLACE(monto,',', '');
     SET success = 1;
     COMMIT;
 END |
@@ -226,16 +226,22 @@ BEGIN
 	 INSERT INTO finanzas_reporte_jetperu ( fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
      nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, 
      telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) 
-     SELECT fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
-     nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, 
-     IF (TIME_FORMAT(hora_pago, '%T') IS NULL, null, TIME_FORMAT(hora_pago, '%T')), 
+     SELECT IF (STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
+     STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR'))) as fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
+     nombres_beneficario, tipo_documento, documento_identidad, cast(monto as decimal(6,2)) as monto, estado, lugar_pago, 
+     IF (STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
+     STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR'))) as fecha_pago,
+     IF (TIME_FORMAT(hora_pago, '%T') IS NULL, null, TIME_FORMAT(hora_pago, '%T')) as hora, 
      telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario
-     from finanzas_stage_jetperu ;	
-    -- ALTER TABLE resultado_proyectos AUTO_INCREMENT = 1;
+     from finanzas_stage_jetperu where nom_usuario = usuario;	
+     delete from finanzas_stage_jetperu where nom_usuario = usuario;
     SET success = 1;
     COMMIT;
 END |
 DELIMITER ;
+
+
+
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
 DELIMITER |

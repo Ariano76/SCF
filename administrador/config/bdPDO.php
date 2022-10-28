@@ -87,51 +87,30 @@ private $DB_PASSWORD = ''; //database password
         return null;
     }
 
-    public function migrar_data_gerencia($accion, $anios) {
+    public function migrar_data_reporte_tarjetas($sp, $usuario) {
         try {               
-            // calling stored procedure command
-            //$sql = "CALL SP_Migrar_Data_Gerencia(@total)";
-            $sql = "CALL SP_Migrar_Data_Gerencia(".$accion.",'".$anios."',@total)";
-            // prepare for execution of the stored procedure
+            $sql = "CALL " . $sp . "('".$usuario."',@total)";
             $stmt = $this->pdo->prepare($sql);                  
-            // execute the stored procedure
             $stmt->execute();
             $stmt->closeCursor();
-            // execute the second query to get customer's level
             $row = $this->pdo->query("SELECT @total AS resultado")->fetch(PDO::FETCH_ASSOC);
-            if ($row) {
-                //return $row !== false ? $row['resultado'] : null;
-                return $row !== 0 ? $row['resultado'] : 0;
-            } 
-                    //echo 'La operación se realizo satisfactoriamente';
-            //return true;
+            return$row['resultado'];
         } catch (PDOException $e) {         
             die("Error ocurrido:" . $e->getMessage());
         }
         return 0;
     }
 
-
-
-
-
-
-
-    public function limpiarDataKobo($sp,$usuario) {
+    public function limpiarDataKobo($sp, $usuario) {
         try {               
-            // calling stored procedure command
             $sql = "CALL " . $sp . "('".$usuario."',@total)";
-            // prepare for execution of the stored procedure
             $stmt = $this->pdo->prepare($sql);                  
-            // execute the stored procedure
             $stmt->execute();
             $stmt->closeCursor();
-             // execute the second query to get customer's level
             $row = $this->pdo->query("SELECT @total AS resultado")->fetch(PDO::FETCH_ASSOC);
             if ($row) {
                 return $row !== false ? $row['resultado'] : null;
             } 
-            //echo 'La operación se realizo satisfactoriamente';
             return true;
         } catch (PDOException $e) {         
             die("Error ocurrido:" . $e->getMessage());
