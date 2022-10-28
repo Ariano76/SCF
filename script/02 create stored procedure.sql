@@ -184,10 +184,25 @@ BEGIN
 END |
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS `SP_finanzas_clean_trim`;
+DROP PROCEDURE IF EXISTS `SP_limpiar_stage_tpp`;
 DELIMITER |
-CREATE PROCEDURE `SP_finanzas_clean_trim`(OUT success INT)
+CREATE PROCEDURE `SP_limpiar_stage_tpp`(in usuario varchar(50), OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN
+		SET success = 0; -- ERROR
+	ROLLBACK;
+	END;
+	START TRANSACTION;
+		delete from finanzas_stage_tpp where nom_usuario = usuario;        
+        SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `SP_finanzas_clean_jetperu`;
+DELIMITER |
+CREATE PROCEDURE `SP_finanzas_clean_jetperu`(OUT success INT)
 BEGIN
 	DECLARE exit handler for sqlexception
 	BEGIN     -- ERROR
@@ -212,6 +227,26 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_finanzas_clean_tpp`;
+DELIMITER |
+CREATE PROCEDURE `SP_finanzas_clean_tpp`(OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN     -- ERROR
+		SET success = 0;
+	ROLLBACK;
+	END;
+ 
+	START TRANSACTION;
+	UPDATE finanzas_stage_tpp SET 
+    codigo_seguimiento=TRIM(codigo_seguimiento), nro_tarjeta=TRIM(nro_tarjeta), tipo_documento=TRIM(tipo_documento), 
+    nro_documento=TRIM(nro_documento), nombres_apellidos=TRIM(nombres_apellidos), sucursal=TRIM(sucursal), 
+    estado=TRIM(estado), saldo=TRIM(saldo), saldo = REPLACE(saldo,',', '');
+    SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `SP_migrar_data_jetperu`;
 DELIMITER |
 CREATE PROCEDURE `SP_migrar_data_jetperu`(IN usuario varchar(50), OUT success INT)
@@ -223,24 +258,53 @@ BEGIN
 	END;
  
 	START TRANSACTION;
-	 INSERT INTO finanzas_reporte_jetperu ( fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
-     nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, 
-     telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) 
-     SELECT IF (STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
-     STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR'))) as fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
-     nombres_beneficario, tipo_documento, documento_identidad, cast(monto as decimal(6,2)) as monto, estado, lugar_pago, 
-     IF (STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
-     STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR'))) as fecha_pago,
-     IF (TIME_FORMAT(hora_pago, '%T') IS NULL, null, TIME_FORMAT(hora_pago, '%T')) as hora, 
-     telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario
-     from finanzas_stage_jetperu where nom_usuario = usuario;	
-     delete from finanzas_stage_jetperu where nom_usuario = usuario;
-    SET success = 1;
+     SET success = 2; -- CODIGO 2, NO EXISTEN REGISTROS PARA INSERTAR
+     select @count_records := count(id_stage_jetperu) from finanzas_stage_jetperu where nom_usuario = usuario;
+     SET @usuario = Codigo_User(usuario);
+      IF @count_records > 0 AND @usuario > 0 THEN
+	    INSERT INTO finanzas_reporte_jetperu ( fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
+        nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, 
+        telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) 
+        SELECT IF (STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
+        STR_TO_DATE(fecha, GET_FORMAT(DATE, 'EUR'))) as fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, 
+        nombres_beneficario, tipo_documento, documento_identidad, cast(monto as decimal(6,2)) as monto, estado, lugar_pago, 
+        IF (STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR')) IS NULL, null, 
+        STR_TO_DATE(fecha_pago, GET_FORMAT(DATE, 'EUR'))) as fecha_pago,
+        IF (TIME_FORMAT(hora_pago, '%T') IS NULL, null, TIME_FORMAT(hora_pago, '%T')) as hora, 
+        telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario
+        from finanzas_stage_jetperu where nom_usuario = usuario;	
+        delete from finanzas_stage_jetperu where nom_usuario = usuario;
+        SET success = 1; -- CODIGO 1, SE INSERTARON REGISTROS
+      END IF;
     COMMIT;
 END |
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS `SP_migrar_data_tpp`;
+DELIMITER |
+CREATE PROCEDURE `SP_migrar_data_tpp`(IN usuario varchar(50), OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN     -- ERROR
+		SET success = 0;
+		ROLLBACK;
+	END;
+ 
+	START TRANSACTION;
+     SET success = 2; -- CODIGO 2, NO EXISTEN REGISTROS PARA INSERTAR
+     select @count_records := count(id_stage_tpp) from finanzas_stage_tpp where nom_usuario = usuario;
+     SET @usuario = Codigo_User(usuario);
+      IF @count_records > 0 AND @usuario > 0 THEN
+	    INSERT INTO finanzas_reporte_tpp ( codigo_seguimiento, nro_tarjeta, tipo_documento, nro_documento, 
+        nombres_apellidos, sucursal, estado, saldo, nom_usuario) SELECT codigo_seguimiento, nro_tarjeta, 
+        tipo_documento, nro_documento, nombres_apellidos, sucursal, estado, cast(saldo as decimal(6,2)), nom_usuario
+        from finanzas_stage_tpp where nom_usuario = usuario;	
+        delete from finanzas_stage_tpp where nom_usuario = usuario;
+        SET success = 1; -- CODIGO 1, SE INSERTARON REGISTROS
+      END IF;
+    COMMIT;
+END |
+DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;

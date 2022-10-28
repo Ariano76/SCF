@@ -13,7 +13,7 @@ require_once ('../vendor/autoload.php');
 if (isset($_POST["import"])) {
   $type = "success";
   
-  $var = $db_1->migrar_data_reporte_tarjetas("SP_migrar_data_jetperu", $nombreUsuario);
+  $var = $db_1->migrar_data_reporte_tarjetas("SP_migrar_data_tpp", $nombreUsuario);
   //echo "<script>console.log('entre al IF var: " . $var . "');</script>"; 
   if (!empty($var) && $var == 1) { 
       //echo "<script>console.log('entre al IF 1: " . $var . "');</script>"; 
@@ -31,12 +31,12 @@ if (isset($_POST["import"])) {
 <div class="col-md-12">
   <div class="card text-dark bg-light">
     <div class="card-header">
-      Migrar datos de JETPERU
+      Migrar datos TPP
     </div>
     <div class="card-body">
       <form method="POST" name="frmExcelImport" id="frmExcelImport" enctype="multipart/form-data">
         <div class="form-group">
-          <label for="txtImagen">Este proceso realiza la migración de los datos del ambiente Stage a la tabla de Reporte JetPerú que contiene los datos validados para su posterior análisis.</label>
+          <label for="txtImagen">Este proceso realiza la migración de los datos del ambiente Stage a la tabla de Reporte TPP que contiene los datos validados para su posterior análisis.</label>
           <br>
         </div>        
         <br>

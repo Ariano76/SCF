@@ -66,45 +66,11 @@ if (isset($_POST["import"])) {
         $dato_08 = "";
         if (isset($spreadSheetAry[$i][7])) {
             $dato_08  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][7]); }
-        $dato_09 = "";
-        if (isset($spreadSheetAry[$i][8])) {
-            $dato_09  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][8]); }
-        $dato_10 = "";
-        if (isset($spreadSheetAry[$i][9])) {
-            $dato_10  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][9]); }
-        $dato_11 = "";
-        if (isset($spreadSheetAry[$i][10])) {
-            $dato_11  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][10]); }
-        $dato_12 = "";
-        if (isset($spreadSheetAry[$i][11])) {
-            $dato_12  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][11]); }
-        $dato_13 = "";
-        if (isset($spreadSheetAry[$i][12])) {
-            $dato_13  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][12]); }
-        $dato_14 = "";
-        if (isset($spreadSheetAry[$i][13])) {
-            $dato_14  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][13]); }
-        $dato_15 = "";
-        if (isset($spreadSheetAry[$i][14])) {
-            $dato_15  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][14]); }
-        $dato_16 = "";
-        if (isset($spreadSheetAry[$i][15])) {
-            $dato_16  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][15]); }
-        $dato_17 = "";
-        if (isset($spreadSheetAry[$i][16])) {
-            $dato_17  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][16]); }
-        $dato_18 = "";
-        if (isset($spreadSheetAry[$i][17])) {
-            $dato_18  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][17]); }
-        $dato_19 = "";
-        if (isset($spreadSheetAry[$i][18])) {
-            $dato_19  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][18]); }
-      if (
-        ! empty($dato_01) || ! empty($dato_02) || ! empty($dato_03) || ! empty($dato_04) || ! empty($dato_05) || ! empty($dato_06) || ! empty($dato_07) || ! empty($dato_08) || ! empty($dato_09) || ! empty($dato_10) || ! empty($dato_11) || ! empty($dato_12) || ! empty($dato_13) || ! empty($dato_14) || ! empty($dato_15) || ! empty($dato_16) || ! empty($dato_17) || ! empty($dato_18) || ! empty($dato_19) ) {
-        $query = "insert into finanzas_stage_jetperu(fecha, nro_planilla, nro_orden, region, apellidos_beneficiario, nombres_beneficario, tipo_documento, documento_identidad, monto, estado, lugar_pago, fecha_pago, hora_pago, telefono_benef, codigo_interno, codSeguimiento, nro_tarjeta, tipo_transferencia, donante, nom_usuario) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $paramType = "ssssssssssssssssssss";
-        $paramArray = array(
-            $dato_01, $dato_02, $dato_03, $dato_04, $dato_05, $dato_06, $dato_07, $dato_08, $dato_09, $dato_10, $dato_11, $dato_12, $dato_13, $dato_14, $dato_15, $dato_16, $dato_17, $dato_18, $dato_19, $nombreUsuario);
+      if ( !empty($dato_01) || !empty($dato_02) || !empty($dato_03) || !empty($dato_04) || !empty($dato_05) || !empty($dato_06) || !empty($dato_07) || !empty($dato_08) ) {
+        $query = "insert into finanzas_stage_tpp(codigo_seguimiento, nro_tarjeta, tipo_documento, nro_documento, nombres_apellidos, sucursal, estado, saldo, nom_usuario) 
+        values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $paramType = "sssssssss";
+        $paramArray = array($dato_01, $dato_02, $dato_03, $dato_04, $dato_05, $dato_06, $dato_07, $dato_08, $nombreUsuario);
         $insertId = $db->insert($query, $paramType, $paramArray);
         $conta++;
 
@@ -129,7 +95,7 @@ if (isset($_POST["import"])) {
 
   <div class="card text-dark bg-light">
     <div class="card-header">
-      Cargar datos del reporte JETPERU
+      Cargar datos del Reporte TPP
     </div>
     <div class="card-body">
       <form method="POST" name="frmExcelImport" id="frmExcelImport" enctype="multipart/form-data">

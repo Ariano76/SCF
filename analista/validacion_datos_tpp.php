@@ -10,7 +10,7 @@ $conn = $db->Connect();
 
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-8">Limpiar datos JETPERU</h1>
+    <h1 class="display-8">Limpiar datos TPP</h1>
     <p class="lead">Identificación de las principales incidencias presente en los datos y su corrección.</p>    
     
     <form method="post" action="">
@@ -28,17 +28,7 @@ $conn = $db->Connect();
   <?php
   if(isset($_POST['submit'])){
     
-    $cod_00 = $db->ejecutarstoredprocedure("SP_finanzas_clean_trim");
-    /*$cod_01 = $db->limpiarDataKobo("SP_UpdateDobleEspacioBlanco",$nombreUsuario);
-    $cod_02 = $db->limpiarDataKobo("SP_UpdateTab",$nombreUsuario);
-    $cod_03 = $db->limpiarDataKobo("SP_UpdateSaltoLinea",$nombreUsuario);
-    $cod_04 = $db->limpiarDataKobo("SP_UpdateLetrasPuntoGuion",$nombreUsuario);
-    $cod_05 = $db->limpiarDataKobo("SP_UpdateBackSlash",$nombreUsuario);
-    $cod_06 = $db->limpiarDataKobo("SP_UpdateNewLineReturnLine",$nombreUsuario);
-    $cod_07 = $db->limpiarDataKobo("SP_UpdateTrim",$nombreUsuario);
-    $cod_08 = $db->limpiarDataKobo("SP_UpdateRecodificarSiNo",$nombreUsuario);
-    $cod_09 = $db->limpiarDataKobo("SP_UpdateInfoTransito",$nombreUsuario);*/
-    //$cod_10 = $db->limpiarDataKobo("SP_UpdateCerosIniciales",$nombreUsuario);
+    $cod_00 = $db->ejecutarstoredprocedure("SP_finanzas_clean_tpp");
 
     if ($cod_00 == 1 ) {
       $type = "success";

@@ -194,12 +194,15 @@ document.addEventListener("DOMContentLoaded", function(){
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="<?php echo $url."/analista/finanza_paquete.php" ?>">Recarga Tarjetas</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Reporte JET PERU</a>
-								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos.php" ?>">Limpiar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Cargar datos JET PERU</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_jetperu.php" ?>">Limpiar datos</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Migrar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Eliminar datos</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/administrador/seccion/migrar_data_beneficiario.php" ?>">Reporte TPP</a>
-								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Limpiar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_tpp.php" ?>">Cargar datos TPP</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_tpp.php" ?>">Limpiar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_tpp.php" ?>">Migrar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Eliminar datos</a>
 							</div>
 						</li>
 						<li>
