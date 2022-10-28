@@ -197,12 +197,12 @@ document.addEventListener("DOMContentLoaded", function(){
 								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Cargar datos JET PERU</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_jetperu.php" ?>">Limpiar datos</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Migrar datos</a>
-								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Eliminar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Depurar datos duplicados</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_tpp.php" ?>">Cargar datos TPP</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_tpp.php" ?>">Limpiar datos</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_tpp.php" ?>">Migrar datos</a>
-								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Eliminar datos</a>
+								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_jetperu.php" ?>">Depurar datos duplicados</a>
 							</div>
 						</li>
 						<li>
