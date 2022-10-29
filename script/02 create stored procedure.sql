@@ -1,5 +1,139 @@
 
 /*********************************
+-- CREAR FUNCIONES
+*********************************/
+
+DROP FUNCTION IF EXISTS `Codigo_User`;
+DELIMITER |
+CREATE FUNCTION `Codigo_User`(usuario varchar(50)) RETURNS int(11)
+	NO SQL
+BEGIN
+	SET @usuario := (SELECT id_usuario FROM usuarios where nombre_usuario = usuario);
+    IF @usuario IS NULL THEN
+		RETURN 0; -- si no existe usuario devuelve 0
+	ELSE
+		RETURN (SELECT id_usuario FROM usuarios where nombre_usuario = usuario); 
+        -- si existe el usuario devolvera su codigo
+    END IF;
+END |
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS `bono_familiar`;
+DELIMITER |
+CREATE FUNCTION `bono_familiar`(codbenficiario int) RETURNS decimal(6,2)
+	NO SQL
+BEGIN
+    IF codbenficiario IS NULL THEN
+	 RETURN 0; -- si no existe usuario devuelve 0
+	ELSE
+	 RETURN (select CASE 
+	 if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + 
+	 if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
+	 if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	
+	 if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
+	 if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	
+	 if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
+	 if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
+	 WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
+	 WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
+	 WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
+	 WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
+	 WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
+	 ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
+	 END AS 'monto'
+	 from integrantes i where i.id_beneficiario = codbenficiario);
+	 -- si existe el usuario devolvera su bono familiar
+    END IF;
+END |
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS `bono_conectividad`;
+DELIMITER |
+CREATE FUNCTION `bono_conectividad`(codbenficiario int) RETURNS decimal(5,2)
+	NO SQL
+BEGIN
+    IF codbenficiario IS NULL THEN
+	 RETURN 0; -- si no existe usuario devuelve 0
+	ELSE
+	 RETURN (select  
+	  IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
+      and (c.como_accede_a_internet="Por wifi  por horas" 
+      or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
+      or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
+      or c.como_accede_a_internet="Ninguna de las anteriores"),
+      (SELECT asignacion from finanzas_bono_conectividad where id_conectividad = 1), 0) as monto 
+	  from comunicacion as c inner join derivacion_sectores as dersec on c.id_beneficiario = dersec.id_beneficiario
+      where c.id_beneficiario = codbenficiario);
+	  -- si existe el usuario devolvera su bono de conectividad
+    END IF;
+END |
+DELIMITER ;
+
+
+
+
+/*********************************
+-- CREAR VISTAS
+*********************************/
+DROP VIEW IF EXISTS vista_finanzas_consulta;
+CREATE VIEW `vista_finanzas_consulta` AS
+	select fp.id_paquete,  fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
+    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
+	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    inner join usuarios as usu on fp.id_usuario = usu.id_usuario
+	group by fp.id_paquete,  fe1.estado, fp.fecha , usu.nombre_usuario, fe2.estado;
+DELIMITER ;
+
+DROP VIEW IF EXISTS vista_finanzas_paquetes_aprobados;
+CREATE VIEW `vista_finanzas_paquetes_aprobados` AS
+	select fp.id_paquete, fp.fecha as 'fecha_envio', fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, 
+    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    where fpa.id_estado = 3
+    group by fp.id_paquete, fp.fecha, fe2.estado, fpa.fecha_aprobacion;
+DELIMITER ;
+
+DROP VIEW IF EXISTS vista_finanzas_consulta_aprobacion;
+CREATE VIEW `vista_finanzas_consulta_aprobacion` AS
+	select fp.id_paquete, fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
+    fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, fpa.observaciones, 
+    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
+	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
+    inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
+	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+    inner join usuarios as usu on fp.id_usuario = usu.id_usuario
+	group by fp.id_paquete,fe1.estado,fp.fecha,usu.nombre_usuario,fe2.estado,fpa.fecha_aprobacion,fpa.observaciones;
+DELIMITER ;
+
+drop view IF EXISTS vista_finanzas_bono_conectividad;
+CREATE VIEW `vista_finanzas_bono_conectividad` AS
+	SELECT id_conectividad, asignacion
+    FROM finanzas_bono_conectividad;
+DELIMITER ;
+
+drop view IF EXISTS vista_finanzas_bono_familiar;
+CREATE VIEW `vista_finanzas_bono_familiar` AS
+	SELECT id_familiar, asignacion
+    FROM finanzas_bono_familiar;
+DELIMITER ;
+
+DROP VIEW IF EXISTS vista_finanzas_reporte_jetperu;
+CREATE VIEW `vista_finanzas_reporte_jetperu` AS
+	SELECT month(fecha) as mes, year(fecha) as anio, count(id_jetperu) as total_registro 
+    FROM bd_bha_sci.finanzas_reporte_jetperu    
+	group by month(fecha), year(fecha) order by year(fecha) desc, month(fecha) desc ;
+DELIMITER ;
+
+
+SELECT @i := @i + 1 as contador, vf.mes, vf.anio, vf.total_registro
+		FROM vista_finanzas_reporte_jetperu as vf cross join (select @i := 0) r;
+/*********************************
 -- CREAR STORED PROCEDURE
 *********************************/
 
@@ -367,7 +501,7 @@ BEGIN
             WHEN 'Cedula' THEN '8 - Cedula'
             WHEN 'Carnet de Refugiado' THEN '9 - Carné de Refugiado'
             ELSE '2 - Otro'
-		END
+		END 
      WHEN 'Ninguno' THEN '8 - Cedula'
      ELSE '8 - Cedula'
 	END AS tipoidbenef, 
@@ -452,129 +586,6 @@ DELIMITER ;
 
 
 
-/*********************************
--- CREAR FUNCIONES
-*********************************/
-
-DROP FUNCTION IF EXISTS `Codigo_User`;
-DELIMITER |
-CREATE FUNCTION `Codigo_User`(usuario varchar(50)) RETURNS int(11)
-	NO SQL
-BEGIN
-	SET @usuario := (SELECT id_usuario FROM usuarios where nombre_usuario = usuario);
-    IF @usuario IS NULL THEN
-		RETURN 0; -- si no existe usuario devuelve 0
-	ELSE
-		RETURN (SELECT id_usuario FROM usuarios where nombre_usuario = usuario); 
-        -- si existe el usuario devolvera su codigo
-    END IF;
-END |
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS `bono_familiar`;
-DELIMITER |
-CREATE FUNCTION `bono_familiar`(codbenficiario int) RETURNS decimal(6,2)
-	NO SQL
-BEGIN
-    IF codbenficiario IS NULL THEN
-	 RETURN 0; -- si no existe usuario devuelve 0
-	ELSE
-	 RETURN (select CASE 
-	 if(length(concat(i.nombre_1a,' ',i.nombre_1b))<3,0,1) + 
-	 if(length(concat(i.nombre_2a,' ',i.nombre_2b))<3,0,1) + 
-	 if(length(concat(i.nombre_3a,' ',i.nombre_3b))<3,0,1) +	
-	 if(length(concat(i.nombre_4a,' ',i.nombre_4b))<3,0,1) + 
-	 if(length(concat(i.nombre_5a,' ',i.nombre_5b))<3,0,1) +	
-	 if(length(concat(i.nombre_6a,' ',i.nombre_6b))<3,0,1) + 
-	 if(length(concat(i.nombre_7a,' ',i.nombre_7b))<3,0,1) + 1
-	 WHEN 1 THEN (select asignacion from finanzas_bono_familiar where id_familiar=1)
-	 WHEN 2 THEN (select asignacion from finanzas_bono_familiar where id_familiar=2)
-	 WHEN 3 THEN (select asignacion from finanzas_bono_familiar where id_familiar=3)
-	 WHEN 4 THEN (select asignacion from finanzas_bono_familiar where id_familiar=4)
-	 WHEN 5 THEN (select asignacion from finanzas_bono_familiar where id_familiar=5)
-	 ELSE (select asignacion from finanzas_bono_familiar where id_familiar=6)
-	 END AS 'monto'
-	 from integrantes i where i.id_beneficiario = codbenficiario);
-	 -- si existe el usuario devolvera su bono familiar
-    END IF;
-END |
-DELIMITER ;
-
-DROP FUNCTION IF EXISTS `bono_conectividad`;
-DELIMITER |
-CREATE FUNCTION `bono_conectividad`(codbenficiario int) RETURNS decimal(5,2)
-	NO SQL
-BEGIN
-    IF codbenficiario IS NULL THEN
-	 RETURN 0; -- si no existe usuario devuelve 0
-	ELSE
-	 RETURN (select  
-	  IF((c.laptop=1 or c.smartphone=1) and dersec.interesado_participar_nutricion=1 
-      and (c.como_accede_a_internet="Por wifi  por horas" 
-      or c.como_accede_a_internet="Un conocido le provee acceso wifi o plan de datos en celular, por algunas horas/días" 
-      or c.como_accede_a_internet="Por datos de celular que recarga de forma interdiaria (prepago)" 
-      or c.como_accede_a_internet="Ninguna de las anteriores"),
-      (SELECT asignacion from finanzas_bono_conectividad where id_conectividad = 1), 0) as monto 
-	  from comunicacion as c inner join derivacion_sectores as dersec on c.id_beneficiario = dersec.id_beneficiario
-      where c.id_beneficiario = codbenficiario);
-	  -- si existe el usuario devolvera su bono de conectividad
-    END IF;
-END |
-DELIMITER ;
-
-
-
-
-/*********************************
--- CREAR VISTAS
-*********************************/
-DROP VIEW IF EXISTS vista_finanzas_consulta;
-CREATE VIEW `vista_finanzas_consulta` AS
-	select fp.id_paquete,  fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
-    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
-	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-    inner join usuarios as usu on fp.id_usuario = usu.id_usuario
-	group by fp.id_paquete,  fe1.estado, fp.fecha , usu.nombre_usuario, fe2.estado;
-DELIMITER ;
-
-DROP VIEW IF EXISTS vista_finanzas_paquetes_aprobados;
-CREATE VIEW `vista_finanzas_paquetes_aprobados` AS
-	select fp.id_paquete, fp.fecha as 'fecha_envio', fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, 
-    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-    where fpa.id_estado = 3
-    group by fp.id_paquete, fp.fecha, fe2.estado, fpa.fecha_aprobacion;
-DELIMITER ;
-
-DROP VIEW IF EXISTS vista_finanzas_consulta_aprobacion;
-CREATE VIEW `vista_finanzas_consulta_aprobacion` AS
-	select fp.id_paquete, fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
-    fe2.estado as 'estado_aprobacion', fpa.fecha_aprobacion, fpa.observaciones, 
-    count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
-	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
-	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
-    inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
-	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
-    inner join usuarios as usu on fp.id_usuario = usu.id_usuario
-	group by fp.id_paquete,fe1.estado,fp.fecha,usu.nombre_usuario,fe2.estado,fpa.fecha_aprobacion,fpa.observaciones;
-DELIMITER ;
-
-drop view IF EXISTS vista_finanzas_bono_conectividad;
-CREATE VIEW `vista_finanzas_bono_conectividad` AS
-	SELECT id_conectividad, asignacion
-    FROM finanzas_bono_conectividad;
-DELIMITER ;
-
-drop view IF EXISTS vista_finanzas_bono_familiar;
-CREATE VIEW `vista_finanzas_bono_familiar` AS
-	SELECT id_familiar, asignacion
-    FROM finanzas_bono_familiar;
-DELIMITER ;
 
 select * from vista_finanzas_paquetes_aprobados;
 /*********************************
