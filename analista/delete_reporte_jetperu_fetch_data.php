@@ -49,7 +49,7 @@ while($row = mysqli_fetch_assoc($query))
 	$sub_array[] = $row['mes'];
 	$sub_array[] = $row['anio'];
 	$sub_array[] = $row['total_registro'];	
-	$sub_array[] = '<a href="#!;" data-id="'.$row['contador'].'" class="btn btn-info btn-sm deletebtn" style="text-align: center; display: inline-block; width: 100%; ">Borrar</a>';
+	$sub_array[] = '<a href="#!;" data-id="'.$row['contador'].'" data-mes="'.$row['mes'].'" data-anio="'.$row['anio'].'" class="btn btn-info btn-sm deletebtn" style="text-align: center; display: inline-block; width: 100%; ">Borrar</a>';
 	$data[] = $sub_array;
 }
 

@@ -1,11 +1,9 @@
-<?php include("../administrador/template/cabecera.php"); 
-
+<?php 
+include("../administrador/template/cabecera.php"); 
 include("../administrador/config/connection.php");
-
 ?>
 
 <script type="text/javascript" src="script/bootbox.min.js"></script>
-<!--script type="text/javascript" src="script/deleteRecords.js"></script-->
 
 <h1 class="display-8">CONSULTA PERIODOS CARGADOS JETPERÚ</h1> 
 <br>
@@ -50,19 +48,29 @@ include("../administrador/config/connection.php");
   // codigo para descargar el formato JETPERU
   $('#tablaUsuarios').on('click', '.deletebtn', function(e) {
     e.preventDefault();
-    var trid = $('#trid').val();
-    //var id = $('#id').val();
-    var id = $(this).data('id');    
-    bootbox.confirm("¿ Está seguro de que desea eliminar el periodo ? ", function(result) {
+    
+    var id = $(this).data('id');
+    var anio = $(this).data('anio');
+    var mes = $(this).data('mes');
+    var mensaje = "¿Está seguro que desea eliminar los datos del año " + anio + " mes " + mes +"?";
+
+    bootbox.confirm(mensaje, function(result) {
       if(result){
         $.ajax({
-          url: "repo_finanza_jetperu.php",
-          type: "get",
+          url: "delete_periodo_jetperu.php",
+          type: "post",
           data: {
-            id: id
+            id: id, mes: mes, anio: anio
           },
           success: function(data) {
-            window.open('repo_finanza_jetperu.php?id='+id,'_blank' ); 
+            var json = JSON.parse(data);
+            status = json.status;
+            if (status == 'true') {
+              $("#" + id).closest('tr').remove();
+            } else {
+              alert('Se presento un error. Intente de nuevo.');
+              return;
+            }
           }
         });
       }
