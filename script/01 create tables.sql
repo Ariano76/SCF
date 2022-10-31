@@ -11,6 +11,7 @@ SELECT CURRENT_DATE();
 -- ELIMINAR TABLAS 
 *********************************/
 
+DROP TABLE if exists finanzas_periodos;
 DROP TABLE if exists finanzas_paquete_detalle;
 DROP TABLE if exists finanzas_proveedor_pago;
 DROP TABLE if exists finanzas_paquete_aprobacion;
@@ -23,10 +24,20 @@ DROP TABLE if exists finanzas_stage_jetperu;
 DROP TABLE if exists finanzas_stage_tpp;
 DROP TABLE if exists finanzas_reporte_jetperu;
 DROP TABLE if exists finanzas_reporte_tpp;
+DROP TABLE if exists finanzas_stage_estado_financiero;
+DROP TABLE if exists finanzas_estado_financiero;
 
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
+
+CREATE TABLE finanzas_periodos (
+	id_periodos	integer NOT NULL AUTO_INCREMENT,
+	mes			varchar(2) NOT NULL,
+	anio		varchar(4) NOT NULL,
+	periodo		varchar(10) NOT NULL default(concat(anio,mes)),
+    PRIMARY KEY (id_periodos)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE finanzas_paquete (
 	id_paquete		INTEGER NOT NULL AUTO_INCREMENT,
@@ -165,6 +176,53 @@ CREATE TABLE finanzas_reporte_tpp
     PRIMARY KEY (id_tpp)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
+CREATE TABLE finanzas_stage_estado_financiero
+(	id_stage_estado     INTEGER NOT NULL AUTO_INCREMENT,
+	account_			VARCHAR(50) NULL,
+    period            	VARCHAR(50) NULL,
+    trans_date         	VARCHAR(50) NULL,
+	usd_amount			VARCHAR(50) NULL,
+	cur					VARCHAR(50) NULL,
+	trans_cur_amt		VARCHAR(50) NULL,
+	donor_currency		VARCHAR(50) NULL,
+	donor_cur_amount	VARCHAR(50) NULL,
+	costc	       		VARCHAR(50) NULL,
+	project           	VARCHAR(50) NULL,
+	sof					VARCHAR(50) NULL,
+	dea					VARCHAR(50) NULL,
+	dea_t            	VARCHAR(50) NULL,
+	text_		        VARCHAR(510) NULL,
+	trans_no			VARCHAR(50) NULL,
+	analysis_type_t     VARCHAR(50) NULL,
+	analysis			VARCHAR(50) NULL,
+	analysis_t			VARCHAR(50) NULL,
+    PRIMARY KEY (id_stage_estado)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_estado_financiero
+(	id_estado_financiero	INTEGER NOT NULL AUTO_INCREMENT,
+	account_		integer NULL,	
+    period			integer NULL,	
+    trans_date		date NULL,
+	usd_amount		decimal(8,2) NULL,	
+    cur				VARCHAR(50) NULL,	
+    trans_cur_amt	decimal(8,2) NULL,
+	donor_currency	VARCHAR(50) NULL,	
+    donor_cur_amount	decimal(8,2) NULL,	
+    costc			integer NULL,
+	project			integer NULL,	
+    sof				integer NULL,	
+    dea				VARCHAR(50) NULL,	
+    dea_t			VARCHAR(255) NULL,
+	text_			VARCHAR(510) NULL,	
+    trans_no		integer NULL,	
+    analysis_type_t	VARCHAR(50) NULL,
+	analysis		VARCHAR(50) NULL,	
+    analysis_t		VARCHAR(255) NULL,
+    PRIMARY KEY (id_estado_financiero)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
 *********************************/
@@ -198,8 +256,15 @@ insert into finanzas_bono_familiar (asignacion) values (300.50),(500.50),(900.50
 insert into finanzas_tipo_documento (documento) 
 values ('DNI'),('Otro'),('CPP'),('Carnet Extranjeria'),('Ruc'),('Pasaporte'),('PTP'),('Cedula'),('Carné de Refugiado');
 
+insert into finanzas_periodos (mes, anio) values ('01','2021'),('02','2021'),('03','2021'),('04','2021'),('05','2021'),
+('06','2021'),('07','2021'),('08','2021'),('09','2021'),('10','2021'),('11','2021'),('12','2021'),('01','2022'),
+('02','2022'),('03','2022'),('04','2022'),('05','2022'),('06','2022'),('07','2022'),('08','2022'),('09','2022'),
+('10','2022'),('11','2022'),('12','2022');
+
+
+
 /***********************************************
 -- REINICIAR EL AUTO INCREMENTE DE LAS TABLAS 
 ************************************************/
-ALTER TABLE finanzas_tipo_documento AUTO_INCREMENT = 1;
-
+ALTER TABLE finanzas_periodos AUTO_INCREMENT = 1;
+truncate table finanzas_periodos ;

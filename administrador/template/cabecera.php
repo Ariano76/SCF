@@ -221,7 +221,37 @@ document.addEventListener("DOMContentLoaded", function(){
 			</div>
 		</nav>
 		<?php	
-	}else{ // ROLES NO FINANZAS
+	} elseif($_SESSION['rolusuario']==3) { // GERENCIA FINANZAS
+		?>
+		<nav class="navbar navbar-expand-md navbar-light bg-white border border-dark">
+			<div class="container-fluid">		
+				<a class="navbar-brand" href="<?php echo $url."/administrador/inicio.php" ?>">
+					<img src="https://www.savethechildren.org.pe/wp-content/themes/save-the-children/images/logo-save-the-children.svg" alt="" width="" height="">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					</a>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<li>
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Análisis Financiero</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="<?php echo $url."/analista/periodos.php" ?>">Periodos</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Cargar datos financieros</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_jetperu.php" ?>">Estado finaciero</a>
+							</div>
+						</li>
+						<a class="nav-item nav-link" href="<?php echo $url."/administrador/seccion/cerrar.php"?>">Cerrar</a>
+						<a class="nav-item nav-link" href="<?php echo $url;?>">Ver sitio web</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<?php	
+	}
+	else{ // ROLES NO FINANZAS
 		?>
 		<nav class="navbar navbar-expand-md navbar-light bg-white border border-dark">
 			<div class="container-fluid">		

@@ -130,6 +130,12 @@ CREATE VIEW `vista_finanzas_reporte_jetperu` AS
 	group by month(fecha), year(fecha) order by year(fecha) desc, month(fecha) desc ;
 DELIMITER ;
 
+drop view IF EXISTS vista_finanzas_periodos;
+CREATE VIEW `vista_finanzas_periodos` AS
+	SELECT id_periodos, mes, anio, periodo
+    FROM finanzas_periodos;
+DELIMITER ;
+
 
 SELECT @i := @i + 1 as contador, vf.mes, vf.anio, vf.total_registro
 		FROM vista_finanzas_reporte_jetperu as vf cross join (select @i := 0) r;
