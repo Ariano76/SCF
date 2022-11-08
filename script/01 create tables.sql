@@ -26,7 +26,8 @@ DROP TABLE if exists finanzas_reporte_jetperu;
 DROP TABLE if exists finanzas_reporte_tpp;
 DROP TABLE if exists finanzas_stage_estado_financiero;
 DROP TABLE if exists finanzas_estado_financiero;
-
+DROP TABLE if exists finanzas_stage_ppto;
+DROP TABLE if exists finanzas_stage_gastos;
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
@@ -38,6 +39,7 @@ CREATE TABLE finanzas_periodos (
 	periodo		varchar(10) NOT NULL default(concat(anio,mes)),
     PRIMARY KEY (id_periodos)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+ALTER TABLE finanzas_periodos ADD CONSTRAINT const_periodos UNIQUE (mes,anio);
 
 CREATE TABLE finanzas_paquete (
 	id_paquete		INTEGER NOT NULL AUTO_INCREMENT,
@@ -222,6 +224,36 @@ CREATE TABLE finanzas_estado_financiero
     PRIMARY KEY (id_estado_financiero)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
+CREATE TABLE finanzas_stage_ppto
+(	id_stage_ppto	INTEGER NOT NULL AUTO_INCREMENT,
+	dea				VARCHAR(50) NULL,
+    anio			VARCHAR(50) NULL,
+    mes				VARCHAR(50) NULL,
+    monto			VARCHAR(50) NULL,
+    PRIMARY KEY (id_stage_ppto)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_stage_gastos
+(	id_stage_gasto	INTEGER NOT NULL AUTO_INCREMENT,
+	account_f		VARCHAR(255) NULL,
+    Costc			VARCHAR(255) NULL,
+    Project			VARCHAR(255) NULL,
+    dea				VARCHAR(255) NULL,
+    dea_t			VARCHAR(255) NULL,
+    period			VARCHAR(255) NULL,
+    transaction_date		VARCHAR(255) NULL,
+    transaction_currency	VARCHAR(255) NULL,
+    amount_in_transaction_currency	VARCHAR(255) NULL,
+    amount_in_usd		VARCHAR(255) NULL,
+    donor_currency		VARCHAR(255) NULL,
+    donor_cur_amount	VARCHAR(255) NULL,
+    trans_no			VARCHAR(255) NULL,
+    analysis_type		VARCHAR(255) NULL,
+    analysis			VARCHAR(255) NULL,
+    transaction_desc	VARCHAR(255) NULL,
+    PRIMARY KEY (id_stage_gasto)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
@@ -250,9 +282,9 @@ insert into finanzas_estados (estado) values ('Pendiente');
 insert into finanzas_estados (estado) values ('Aprobado');
 insert into finanzas_estados (estado) values ('Rechazado');
 
-insert into finanzas_bono_conectividad (asignacion) values (120.50);
+insert into finanzas_bono_conectividad (asignacion) values (120.255);
 
-insert into finanzas_bono_familiar (asignacion) values (300.50),(500.50),(900.50),(1300.50),(5300.50),(9300.50);
+insert into finanzas_bono_familiar (asignacion) values (300.255),(2550.50),(900.50),(1300.50),(5300.50),(9300.50);
 insert into finanzas_tipo_documento (documento) 
 values ('DNI'),('Otro'),('CPP'),('Carnet Extranjeria'),('Ruc'),('Pasaporte'),('PTP'),('Cedula'),('Carné de Refugiado');
 
@@ -260,7 +292,6 @@ insert into finanzas_periodos (mes, anio) values ('01','2021'),('02','2021'),('0
 ('06','2021'),('07','2021'),('08','2021'),('09','2021'),('10','2021'),('11','2021'),('12','2021'),('01','2022'),
 ('02','2022'),('03','2022'),('04','2022'),('05','2022'),('06','2022'),('07','2022'),('08','2022'),('09','2022'),
 ('10','2022'),('11','2022'),('12','2022');
-
 
 
 /***********************************************

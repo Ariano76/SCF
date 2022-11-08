@@ -87,6 +87,9 @@ private $DB_PASSWORD = ''; //database password
         return null;
     }
 
+
+
+
     public function migrar_data_reporte_tarjetas($sp, $usuario) {
         try {               
             $sql = "CALL " . $sp . "('".$usuario."',@total)";

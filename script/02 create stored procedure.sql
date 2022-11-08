@@ -340,6 +340,38 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_limpiar_stage_ppto`;
+DELIMITER |
+CREATE PROCEDURE `SP_limpiar_stage_ppto`(OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN
+		SET success = 0; -- ERROR
+	ROLLBACK;
+	END;
+	START TRANSACTION;
+		delete from finanzas_stage_ppto ;        
+        SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `SP_limpiar_stage_gastos`;
+DELIMITER |
+CREATE PROCEDURE `SP_limpiar_stage_gastos`(OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN
+		SET success = 0; -- ERROR
+	ROLLBACK;
+	END;
+	START TRANSACTION;
+		delete from finanzas_stage_gastos ;        
+        SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `SP_finanzas_clean_jetperu`;
 DELIMITER |
 CREATE PROCEDURE `SP_finanzas_clean_jetperu`(OUT success INT)

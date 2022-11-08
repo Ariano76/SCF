@@ -238,7 +238,8 @@ document.addEventListener("DOMContentLoaded", function(){
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="<?php echo $url."/analista/periodos.php" ?>">Periodos</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_jetperu.php" ?>">Cargar datos financieros</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_ppto.php" ?>">Cargar datos financieros PPTO</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_gastos.php" ?>">Cargar datos financieros Gastos</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_jetperu.php" ?>">Estado finaciero</a>
 							</div>
