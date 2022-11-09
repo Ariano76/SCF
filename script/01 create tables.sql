@@ -27,7 +27,8 @@ DROP TABLE if exists finanzas_reporte_tpp;
 DROP TABLE if exists finanzas_stage_estado_financiero;
 DROP TABLE if exists finanzas_estado_financiero;
 DROP TABLE if exists finanzas_stage_ppto;
-DROP TABLE if exists finanzas_stage_gastos;
+DROP TABLE if exists finanzas_stage_gasto;
+DROP TABLE if exists finanzas_dea;
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
@@ -229,15 +230,35 @@ CREATE TABLE finanzas_stage_ppto
 	dea				VARCHAR(50) NULL,
     anio			VARCHAR(50) NULL,
     mes				VARCHAR(50) NULL,
+    periodo			VARCHAR(50) NULL,
     monto			VARCHAR(50) NULL,
     PRIMARY KEY (id_stage_ppto)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
+CREATE TABLE finanzas_stage_gasto
+(	id_stage_gasto	INTEGER NOT NULL AUTO_INCREMENT,
+	dea				VARCHAR(50) NULL,
+    anio			VARCHAR(50) NULL,
+    mes				VARCHAR(50) NULL,
+    periodo			VARCHAR(50) NULL,
+    monto			VARCHAR(50) NULL,
+    PRIMARY KEY (id_stage_gasto)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_dea
+(	id_dea		INTEGER NOT NULL AUTO_INCREMENT,
+	dea			VARCHAR(50) NULL,
+    descripcion	VARCHAR(255) NULL,
+    PRIMARY KEY (id_dea)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+/*
 CREATE TABLE finanzas_stage_gastos
 (	id_stage_gasto	INTEGER NOT NULL AUTO_INCREMENT,
 	account_f		VARCHAR(255) NULL,
-    Costc			VARCHAR(255) NULL,
-    Project			VARCHAR(255) NULL,
+    costc			VARCHAR(255) NULL,
+    project			VARCHAR(255) NULL,
+    drc_description	VARCHAR(255) NULL,
     dea				VARCHAR(255) NULL,
     dea_t			VARCHAR(255) NULL,
     period			VARCHAR(255) NULL,
@@ -253,7 +274,7 @@ CREATE TABLE finanzas_stage_gastos
     transaction_desc	VARCHAR(255) NULL,
     PRIMARY KEY (id_stage_gasto)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
-
+*/
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
@@ -292,6 +313,48 @@ insert into finanzas_periodos (mes, anio) values ('01','2021'),('02','2021'),('0
 ('06','2021'),('07','2021'),('08','2021'),('09','2021'),('10','2021'),('11','2021'),('12','2021'),('01','2022'),
 ('02','2022'),('03','2022'),('04','2022'),('05','2022'),('06','2022'),('07','2022'),('08','2022'),('09','2022'),
 ('10','2022'),('11','2022'),('12','2022');
+
+insert into finanzas_dea (dea, descripcion) values ('1051151','Country Support Staff'),
+('1051152','National Staff - Fringe'),('1051153','Country support Staff - Fringe'),
+('1051154','National Travels - Airfares'),('1051155','National Travels Support Staff - Airfares'),
+('1051156','Local transportation'),('1051157','Local transportation - Support Staff'),('1051158','Per Diem'),
+('1051159','Per Diem - Support Staff'),('1051160','Items with a unit cost of less than $5,000 Laptop/Computers'),
+('1051161','Items with a unit cost of less than $5,000 Phones'),
+('1051162','Items with a unit cost of less than $5,000 Tablets'),
+('1051163','Items with a unit cost of less than $5,000 Printers'),
+('1051164','Items with a unit cost of less than $5,000 Accessories (headphones, mouse, others)'),
+('1051165','Items with a unit cost of less than $5,000 Basic Licenses (antivirus, office, security)'),
+('1051166','Items with a unit cost of less than $5,000 Other Licenses (Creative Cloud)'),
+('1051167','Consultancy team psychological support - staff'),
+('1051168','Consultant for Lessons learned & Systematization'),
+('1051169','Consultant Final Report'),('1051170','Baseline and endline evaluation'),
+('1051171','Consultant to Update virtual platform'),
+('1051172','Consultancy Child safeguarding'),('1051173','Office Supplies'),('1051174','Computer Supplies'),
+('1051175','Start-up supplies'),('1051176','Communications (telephone, fax, etc.)'),
+('1051177','Postage/Parcel Delivery'),('1051178','Building maintenance & repair'),('1051179','Translation'),
+('1051180','Subscription (bitly, wsp, zoom, sms)'),('1051181','Legal Fees'),('1051182','Advertising'),
+('1051183','Staff development- national and regional team'),('1051184','Branding'),('1051185','Premises'),
+('1051186','Safety & Security (EPP´S)'),('1051187','Transit Package (T)'),
+('1051188','Settlement packages (E1, E2, E3)'),('1051189','Transfer Fees'),
+('1051190','Staff transport - Distribution days'),('1051191','Rent cost nutrición'),
+('1051192','Communication materials for the migrant (print materials)'),
+('1051193','Food assistance communication materials for the migrant, in-transit population (Kits for migrants)'),
+('1051194','Social and behavior change communications (messaging)'),
+('1051195','Capacity-building for local institutional actors (contests, communicational material for ollas communes, demonstrative sessions)'),
+('1051196','Training and support to community health workers/promoters in MIYCN-E in host communities.'),
+('1051197','Group sensitization sessions to promote recommended MIYCN-E practices (Communication materials, nutrition kits, and raffles to be used to promote participation)'),
+('1051198','Training and support to PLW (Counselling for women in reproductive age)'),
+('1051199','Communication strategy for sensitizing immigrants on the importance of maintaining good nutrition standards (Messaging via whatsapp and social media, communication material)'),
+('1051200','Spaces to promote breastfeeding practices (Lactawawitas)'),
+('1051201','Connectivity voucher for nutrition beneficiaries'),
+('1051202','Capacity strengthening of SC staff in MIYCN-E'),('1051203','Staff transport'),('1051204','Rent cost cash'),
+('1051205','Digital platforms and communications (license and fees for Zoom, Whatsapp)'),
+('1051206','Nutrition communication materials for the migrant, in-transit population (Kits for babies)'),
+('1051207','Workshops'),('1051208','Call center'),('1051111-1051150','National Staff'),
+('C84008179','Country Shared Costs - Other'),('F84008179','Country Shared Costs - Non salary benefits'),
+('N84008179','Country Shared Costs - National salaries'),('P84008179','Country Shared Costs - Premise costs'),
+('T84008179','Country Shared Costs - Travel & Lodging'),
+('V84008179','Country Shared Costs – Vehicle & transport costs');
 
 
 /***********************************************

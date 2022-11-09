@@ -57,45 +57,11 @@ if (isset($_POST["import"])) {
         $dato_05 = "";
         if (isset($spreadSheetAry[$i][4])) {
             $dato_05  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][4]); }
-        $dato_06 = "";
-        if (isset($spreadSheetAry[$i][5])) {
-            $dato_06  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][5]); }
-        $dato_07 = "";
-        if (isset($spreadSheetAry[$i][6])) {
-            $dato_07  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][6]); }
-        $dato_08 = "";
-        if (isset($spreadSheetAry[$i][7])) {
-            $dato_08  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][7]); }
-        $dato_09 = "";
-        if (isset($spreadSheetAry[$i][8])) {
-            $dato_09  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][8]); }
-        $dato_10 = "";
-        if (isset($spreadSheetAry[$i][9])) {
-            $dato_10  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][9]); }
-        $dato_11 = "";
-        if (isset($spreadSheetAry[$i][10])) {
-            $dato_11  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][10]); }
-        $dato_12 = "";
-        if (isset($spreadSheetAry[$i][11])) {
-            $dato_12  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][11]); }
-        $dato_13 = "";
-        if (isset($spreadSheetAry[$i][12])) {
-            $dato_13  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][12]); }
-        $dato_14 = "";
-        if (isset($spreadSheetAry[$i][13])) {
-            $dato_14  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][13]); }
-        $dato_15 = "";
-        if (isset($spreadSheetAry[$i][14])) {
-            $dato_15  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][14]); }
-        $dato_16 = "";
-        if (isset($spreadSheetAry[$i][15])) {
-            $dato_16  = mysqli_real_escape_string($conn, $spreadSheetAry[$i][15]); }
 
-      if ( !empty($dato_01) || ! empty($dato_02) || ! empty($dato_03) || ! empty($dato_04) || ! empty($dato_05) || ! empty($dato_06) || ! empty($dato_07) || ! empty($dato_08) || ! empty($dato_09) || ! empty($dato_10) || ! empty($dato_11) || ! empty($dato_12) || ! empty($dato_13) || ! empty($dato_14) || ! empty($dato_15) || ! empty($dato_16)  ) {
-        $query = "insert into finanzas_stage_gastos( account_f, Costc, Project, dea, dea_t, period, transaction_date, transaction_currency, amount_in_transaction_currency, amount_in_usd, donor_currency, donor_cur_amount, trans_no, analysis_type, analysis, transaction_desc
-          ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $paramType = "ssssssssssssssss";
-        $paramArray = array($dato_01, $dato_02, $dato_03, $dato_04, $dato_05, $dato_06, $dato_07, $dato_08, $dato_09, $dato_10, $dato_11, $dato_12, $dato_13, $dato_14, $dato_15, $dato_16);
+      if ( !empty($dato_01) || !empty($dato_02) || !empty($dato_03) || !empty($dato_04) || !empty($dato_05)) {
+        $query = "insert into finanzas_stage_gasto(dea, anio, mes, periodo, monto) values(?, ?, ?, ?, ?)";
+        $paramType = "sssss";
+        $paramArray = array($dato_01, $dato_02, $dato_03, $dato_04, $dato_05);
         $insertId = $db->insert($query, $paramType, $paramArray);
         $conta++;
 
