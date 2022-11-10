@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function(){
 						<li>
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Análisis Financiero</a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/gerencia/periodos.php" ?>">DEAs</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/dea.php" ?>">Maestro DEA</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_ppto.php" ?>">Cargar datos financieros PPTO</a>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_gastos.php" ?>">Cargar datos financieros Gastos</a>

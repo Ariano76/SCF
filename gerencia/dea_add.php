@@ -1,9 +1,9 @@
 <?php 
 include('../administrador/config/connection.php');
-$nom_actividad = $_POST['nom_actividad'];
-$fecha_actividad = $_POST['fecha_actividad'];
+$dea = $_POST['dea'];
+$descripcion = $_POST['descripcion'];
 
-$sql = "INSERT INTO `actividad` (`nom_actividad`,`fecha_actividad`) values ('$nom_actividad', '$fecha_actividad' )";
+$sql = "INSERT INTO `finanzas_dea` (`dea`,`descripcion`) values ('$dea', '$descripcion' )";
 $query= mysqli_query($con,$sql);
 $lastId = mysqli_insert_id($con);
 if($query ==true)

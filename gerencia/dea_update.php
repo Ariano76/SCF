@@ -1,12 +1,12 @@
 <?php 
 include('../administrador/config/connection.php');
-$nom_actividad = $_POST['nom_actividad'];
-$fecha_actividad = $_POST['fecha_actividad'];
+$dea = $_POST['dea'];
+$descripcion = $_POST['descripcion'];
 
 $id = $_POST['id'];
 
-$sql = "UPDATE `actividad` SET  `nom_actividad`= '$nom_actividad', `fecha_actividad`='$fecha_actividad'
-   WHERE id_actividad='$id' ";
+$sql = "UPDATE `finanzas_dea` SET  `dea`= '$dea', `descripcion`='$descripcion'
+   WHERE id_dea='$id' ";
 
 $query= mysqli_query($con,$sql);
 $lastId = mysqli_insert_id($con);

@@ -23,9 +23,9 @@ include("../administrador/config/connection.php");
   <table id="tablaUsuarios" class="table table-striped table-bordered table-condensed small" style="width:100%">
     <thead class="text-center">
       <tr>
-        <th>Codigo</th>
-        <th>Codigo DEA</th>
-        <th>Descripcion</th>
+        <th>Código</th>
+        <th>Código DEA</th>
+        <th>Descripción</th>
         <th>Acción</th>
       </tr>
     </thead>
@@ -45,7 +45,7 @@ include("../administrador/config/connection.php");
       'paging': 'true',
       'order': [],
       'ajax': {
-        'url': 'periodos_fetch_data.php',
+        'url': 'dea_fetch_data.php',
         'type': 'post',
       },
       "aoColumnDefs": [{
@@ -57,17 +57,15 @@ include("../administrador/config/connection.php");
   });
   $(document).on('submit', '#addUser', function(e) {
     e.preventDefault();
-    var nom_actividad = $('#addnom_actividadField').val();
-    var fecha_actividad = $('#addfecha_actividadField').val();
-    var mes = $('#addmesField').val();
-    if (nom_actividad != '' && fecha_actividad != '') {
+    var dea = $('#adddeaField').val();
+    var descripcion = $('#adddescripcionField').val();
+    if (dea != '' && descripcion != '') {
       $.ajax({
-        url: "actividad_add.php",
+        url: "dea_add.php",
         type: "post",
         data: {
-          nom_actividad: nom_actividad,
-          fecha_actividad: fecha_actividad,
-          mes: mes
+          dea: dea,
+          descripcion: descripcion,
         },
         success: function(data) {
           var json = JSON.parse(data);
@@ -87,17 +85,17 @@ include("../administrador/config/connection.php");
   });  
   $(document).on('submit', '#updateUser', function(e) {
     e.preventDefault();
-    var nom_actividad = $('#nom_actividadField').val();
-    var fecha_actividad = $('#fecha_actividadField').val();      
+    var dea = $('#deaField').val();
+    var descripcion = $('#descripcionField').val();      
     var trid = $('#trid').val();
     var id = $('#id').val();
-    if (nom_actividad != '') {
+    if (dea != '') {
       $.ajax({
-        url: "actividad_update.php",
+        url: "dea_update.php",
         type: "post",
         data: {
-          nom_actividad: nom_actividad,
-          fecha_actividad: fecha_actividad,
+          dea: dea,
+          descripcion: descripcion,
           id: id
         },
         success: function(data) {
@@ -108,7 +106,7 @@ include("../administrador/config/connection.php");
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
             var row = table.row("[id='" + trid + "']");
 
-            row.row("[id='" + trid + "']").data([id, nom_actividad, fecha_actividad, button]);
+            row.row("[id='" + trid + "']").data([id, dea, descripcion, button]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -127,54 +125,48 @@ include("../administrador/config/connection.php");
       $('#exampleModal').modal('show');
 
       $.ajax({
-        url: "actividad_get_single.php",
+        url: "dea_get_single.php",
         data: {
           id: id
         },
         type: 'post',
         success: function(data) {
           var json = JSON.parse(data);
-          $('#nom_actividadField').val(json.nom_actividad);
-          $('#fecha_actividadField').val(json.fecha_actividad);
+          $('#deaField').val(json.dea);
+          $('#descripcionField').val(json.descripcion);
 
           $('#id').val(id);
           $('#trid').val(trid);
-          //console.log("La Respuesta esta_de_acuerdoField es :" + json.esta_de_acuerdo);
-
         }
       })
     });
 
   </script>
-  <!-- Modal -->
-  <!--div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"-->
+  <!-- Update DEA Modal -->
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <!--div class="modal-dialog" role="document"-->
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR ACTIVIDADES</h5>
+          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR DEA</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="updateUser">
             <input type="hidden" name="id" id="id" value="">
             <input type="hidden" name="trid" id="trid" value="">
-            
+
             <div class="mb-3 row">
-              <label for="nom_actividadField" class="col-md-3 form-label">Nombre Actividad</label>
+              <label for="deaField" class="col-md-3 form-label">Código DEA</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="deaField" name="City" maxlength="20">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="descripcionField" class="col-md-3 form-label">Descripción DEA</label>
               <div class="md-form amber-textarea active-amber-textarea col-md-8">
-                <textarea class="form-control rounded-0" name="text" id="nom_actividadField" rows="4" cols="45" maxlength="250" ></textarea>
+                <textarea class="form-control rounded-0" name="text" id="descripcionField" rows="4" cols="45" maxlength="255" ></textarea>
               </div>
             </div>
-
-            <div class="mb-3 row">
-              <label for="cual_numero_usa_con_frecuenciaField" class="col-md-3 form-label">¿Cuál número usa con mayor frecuencia?</label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" id="cual_numero_usa_con_frecuenciaField" name="City" maxlength="250">
-              </div>
-            </div>
-
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Actualizar</button>
             </div>
@@ -198,15 +190,15 @@ include("../administrador/config/connection.php");
         <div class="modal-body">
           <form id="addUser" action="">
             <div class="mb-3 row">
-              <label for="addnom_actividadField" class="col-md-3 form-label">Actividad</label>
-              <div class="col-md-9">
-                <textarea class="form-control rounded-0" name="text" id="addnom_actividadField" rows="4" cols="45" maxlength="250" autocomplete="off"></textarea>
+              <label for="adddeaField" class="col-md-3 form-label">Código DEA</label>
+              <div class="col-md-9">  
+                <input type="text" class="form-control" id="adddeaField" name="City" maxlength="20">
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="addfecha_actividadField" class="col-md-3 form-label">Fecha realización</label>
+              <label for="adddescripcionField" class="col-md-3 form-label">Descripción DEA</label>
               <div class="col-md-9">
-                <input id="addfecha_actividadField" type="date" name="fecha" value="<?php echo date("Y-m-d"); ?>">
+                <textarea class="form-control rounded-0" name="text" id="adddescripcionField" rows="4" cols="45" maxlength="255" autocomplete="off"></textarea>
               </div>
             </div>
 
