@@ -236,12 +236,12 @@ document.addEventListener("DOMContentLoaded", function(){
 						<li>
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Análisis Financiero</a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/analista/periodos.php" ?>">Periodos</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/periodos.php" ?>">DEAs</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_ppto.php" ?>">Cargar datos financieros PPTO</a>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_gastos.php" ?>">Cargar datos financieros Gastos</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_jetperu.php" ?>">Estado finaciero</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/finanzas_dashboard.php" ?>">Dashboard</a>
 							</div>
 						</li>
 						<a class="nav-item nav-link" href="<?php echo $url."/administrador/seccion/cerrar.php"?>">Cerrar</a>

@@ -1,22 +1,22 @@
 <?php include("../administrador/config/connection.php");
 
 $output= array();
-$sql = "SELECT * FROM vista_finanzas_periodos";
+$sql = "SELECT * FROM vista_finanzas_dea";
 
 $totalQuery = mysqli_query($con,$sql);
 $total_all_rows = mysqli_num_rows($totalQuery);
 
 $columns = array(
-	0 => 'id_periodos',
-	1 => 'mes',
-	2 => 'anio',
-	3 => 'periodo',
+	0 => 'id_dea',
+	1 => 'dea',
+	2 => 'descripcion',
 );
 
 if(isset($_POST['search']['value']))
 {
 	$search_value = $_POST['search']['value'];
-	$sql .= " WHERE periodo like '%".$search_value."%'";
+	$sql .= " WHERE dea like '%".$search_value."%'";
+	$sql .= " OR descripcion like '%".$search_value."%'";	
 }
 
 if(isset($_POST['order']))
@@ -27,7 +27,7 @@ if(isset($_POST['order']))
 }
 else
 {
-	$sql .= " ORDER BY id_periodos asc";
+	$sql .= " ORDER BY id_dea asc";
 }
 
 if($_POST['length'] != -1)
@@ -43,12 +43,11 @@ $data = array();
 while($row = mysqli_fetch_assoc($query))
 {
 	$sub_array = array();
-	$sub_array[] = $row['id_periodos'];
-	$sub_array[] = $row['mes'];
-	$sub_array[] = $row['anio'];
-	$sub_array[] = $row['periodo'];
+	$sub_array[] = $row['id_dea'];
+	$sub_array[] = $row['dea'];
+	$sub_array[] = $row['descripcion'];
 	
-	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_periodos'].'" class="btn btn-info btn-sm editbtn" >Edit</a>';
+	$sub_array[] = '<a href="javascript:void();" data-id="'.$row['id_dea'].'" class="btn btn-info btn-sm editbtn" >Edit</a>';
 	$data[] = $sub_array;
 }
 

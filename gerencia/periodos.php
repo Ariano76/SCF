@@ -11,7 +11,7 @@ include("../administrador/config/connection.php");
   }
 </style>
 
-<h1 class="display-8">MAESTRO DE PERIODOS</h1> 
+<h1 class="display-8">MAESTRO DEA</h1> 
 <div class="container">
 
 </div>
@@ -24,9 +24,8 @@ include("../administrador/config/connection.php");
     <thead class="text-center">
       <tr>
         <th>Codigo</th>
-        <th>Mes</th>
-        <th>Año</th>
-        <th>Periodo</th>
+        <th>Codigo DEA</th>
+        <th>Descripcion</th>
         <th>Acción</th>
       </tr>
     </thead>
@@ -51,7 +50,7 @@ include("../administrador/config/connection.php");
       },
       "aoColumnDefs": [{
         "bSortable": false,
-        "aTargets": [4]
+        "aTargets": [3]
       },
       ]
     });
@@ -168,10 +167,11 @@ include("../administrador/config/connection.php");
                 <textarea class="form-control rounded-0" name="text" id="nom_actividadField" rows="4" cols="45" maxlength="250" ></textarea>
               </div>
             </div>
+
             <div class="mb-3 row">
-              <label for="fecha_actividadField" class="col-md-3 form-label">Fecha realización</label>
-              <div class="col-md-8">
-                <input id="fecha_actividadField" type="date" name="fecha" value="2017-06-01">
+              <label for="cual_numero_usa_con_frecuenciaField" class="col-md-3 form-label">¿Cuál número usa con mayor frecuencia?</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" id="cual_numero_usa_con_frecuenciaField" name="City" maxlength="250">
               </div>
             </div>
 
@@ -192,7 +192,7 @@ include("../administrador/config/connection.php");
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">AGREGAR NUEVA ACTIVIDAD</h5>
+          <h5 class="modal-title" id="exampleModalLabel">AGREGAR NUEVO DEA</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -207,42 +207,6 @@ include("../administrador/config/connection.php");
               <label for="addfecha_actividadField" class="col-md-3 form-label">Fecha realización</label>
               <div class="col-md-9">
                 <input id="addfecha_actividadField" type="date" name="fecha" value="<?php echo date("Y-m-d"); ?>">
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <label for="addmesField" class="col-md-3 form-label">Mes</label>
-              <div class="col-md-9">
-                <select class="form-select" id="addmesField" aria-label="Default select example" name="mes">
-                  <?php 
-                  $periodo_str='';
-                  for ($i = 1; $i < 13; $i++) { 
-                    $periodo_str = (string)$i;
-                    if (strlen($periodo_str) == 1) {
-                      $periodo_str="0".$i;
-                    }else{
-                      $periodo_str=$i;
-                    }
-                    ?>
-                    <option value="<?php echo $periodo_str; ?>"><?php echo $periodo_str;?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <label for="addanioField" class="col-md-3 form-label">Año</label>
-              <div class="col-md-9">
-                <select class="form-select" id="addanioField" aria-label="Default select example" name="anio">
-                  <?php 
-                  $anio_str='';
-                  $currentDate = new DateTime();
-                  //Get the year by using the format method.
-                  $year = $currentDate->format("Y");
-                  for ($i = 2020; $i < $year+2; $i++) { 
-                    $anio_str = (string)$i;
-                    ?>
-                    <option value="<?php echo $anio_str; ?>"><?php echo $anio_str;?></option>
-                  <?php } ?>
-                </select>
               </div>
             </div>
 

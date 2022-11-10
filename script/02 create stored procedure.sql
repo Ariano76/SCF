@@ -136,6 +136,12 @@ CREATE VIEW `vista_finanzas_periodos` AS
     FROM finanzas_periodos;
 DELIMITER ;
 
+drop view IF EXISTS vista_finanzas_dea;
+CREATE VIEW `vista_finanzas_dea` AS
+	SELECT id_dea, dea, descripcion
+    FROM finanzas_dea;
+DELIMITER ;
+
 
 SELECT @i := @i + 1 as contador, vf.mes, vf.anio, vf.total_registro
 		FROM vista_finanzas_reporte_jetperu as vf cross join (select @i := 0) r;
