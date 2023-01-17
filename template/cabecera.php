@@ -35,14 +35,6 @@
   				</button>  				
   				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
   					<div class="navbar-nav">
-  						<li>
-  							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Opcion 1</a>
-  							
-  						</li>
-  						<li>
-  							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Opcion 2</a>
-  							
-  						</li>		
   						<a class="nav-item nav-link" href="<?php echo $url."/administrador/index.php"?>" tabindex="-1" aria-disabled="true">Ingresar al sistema</a>
   					</div>
   				</div>

@@ -160,7 +160,6 @@ document.addEventListener("DOMContentLoaded", function(){
 							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tareas</a>
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="<?php echo $url."/coordinador/paquetes_aprobacion.php"?>">Aprobar paquetes</a>
-								<div class="dropdown-divider"></div>
 							</div>
 						</li>
 						<li>
@@ -204,14 +203,6 @@ document.addEventListener("DOMContentLoaded", function(){
 								<a class="dropdown-item" href="<?php echo $url."/analista/uploadfile_tpp.php" ?>">Cargar datos TPP</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/validacion_datos_tpp.php" ?>">Limpiar datos</a>
 								<a class="dropdown-item" href="<?php echo $url."/analista/migrar_data_tpp.php" ?>">Migrar datos</a>
-							</div>
-						</li>
-						<li>
-							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reportes Control</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_001.php" ?>">Número de beneficiarios</a>
-								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_002.php" ?>">Número de hogares con embarazadas</a>
-								<a class="dropdown-item" href="<?php echo $url."/reportes/reporte_003.php" ?>">Hogares con familiares con discapacidad</a>
 							</div>
 						</li>						
 						<a class="nav-item nav-link" href="<?php echo $url."/administrador/seccion/cerrar.php"?>">Cerrar</a>

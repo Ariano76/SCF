@@ -78,13 +78,13 @@ DELIMITER ;
 DROP VIEW IF EXISTS vista_finanzas_consulta;
 CREATE VIEW `vista_finanzas_consulta` AS
 	select fp.id_paquete,  fe1.estado, fp.fecha as 'fecha_envio', usu.nombre_usuario, 
-    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios'
+    fe2.estado as 'estado_aprobacion', count(fpd.id_paquete_detalle) as 'numero_beneficiarios', fpa.observaciones
 	from finanzas_paquete as fp inner join finanzas_paquete_aprobacion as fpa on fp.id_paquete = fpa.id_paquete
 	inner join finanzas_estados as fe1 on fp.id_estado = fe1.id_estado
 	inner join finanzas_estados as fe2 on fpa.id_estado = fe2.id_estado
 	inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
     inner join usuarios as usu on fp.id_usuario = usu.id_usuario
-	group by fp.id_paquete,  fe1.estado, fp.fecha , usu.nombre_usuario, fe2.estado;
+	group by fp.id_paquete,  fe1.estado, fp.fecha , usu.nombre_usuario, fe2.estado, fpa.observaciones;
 DELIMITER ;
 
 DROP VIEW IF EXISTS vista_finanzas_paquetes_aprobados;
