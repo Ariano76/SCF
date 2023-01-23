@@ -42,9 +42,16 @@ CREATE TABLE finanzas_periodos (
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 ALTER TABLE finanzas_periodos ADD CONSTRAINT const_periodos UNIQUE (mes,anio);
 
+
+CREATE TRIGGER asigna_periodo BEFORE INSERT ON finanzas_periodos
+FOR EACH ROW 
+BEGIN
+  SET NEW.periodo = new.mes;
+END;
+        
 CREATE TABLE finanzas_paquete (
 	id_paquete		INTEGER NOT NULL AUTO_INCREMENT,
-	fecha			DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP),
+	fecha			DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	id_estado		INTEGER NOT NULL DEFAULT 1,
 	id_usuario		INTEGER NOT NULL,
     PRIMARY KEY (id_paquete)
@@ -71,7 +78,7 @@ CREATE TABLE finanzas_paquete_detalle (
 CREATE TABLE finanzas_proveedor_pago (
 	id_proveedor_pago    	INTEGER NOT NULL AUTO_INCREMENT,
 	id_paquete_aprobacion 	INTEGER NOT NULL,
-	fecha                	DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP),
+	fecha                	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	id_estado            	INTEGER NOT NULL,
 	id_usuario           	INTEGER NOT NULL,
     PRIMARY KEY (id_proveedor_pago)
@@ -303,9 +310,9 @@ insert into finanzas_estados (estado) values ('Pendiente');
 insert into finanzas_estados (estado) values ('Aprobado');
 insert into finanzas_estados (estado) values ('Rechazado');
 
-insert into finanzas_bono_conectividad (asignacion) values (120.255);
+insert into finanzas_bono_conectividad (asignacion) values (120.25);
 
-insert into finanzas_bono_familiar (asignacion) values (300.255),(2550.50),(900.50),(1300.50),(5300.50),(9300.50);
+insert into finanzas_bono_familiar (asignacion) values (300.25),(2550.50),(900.50),(1300.50),(5300.50),(9300.50);
 insert into finanzas_tipo_documento (documento) 
 values ('DNI'),('Otro'),('CPP'),('Carnet Extranjeria'),('Ruc'),('Pasaporte'),('PTP'),('Cedula'),('Carné de Refugiado');
 

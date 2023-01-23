@@ -126,7 +126,7 @@ DELIMITER ;
 DROP VIEW IF EXISTS vista_finanzas_reporte_jetperu;
 CREATE VIEW `vista_finanzas_reporte_jetperu` AS
 	SELECT month(fecha) as mes, year(fecha) as anio, count(id_jetperu) as total_registro 
-    FROM bd_bha_sci.finanzas_reporte_jetperu    
+    FROM finanzas_reporte_jetperu    
 	group by month(fecha), year(fecha) order by year(fecha) desc, month(fecha) desc ;
 DELIMITER ;
 
