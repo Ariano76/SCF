@@ -499,6 +499,22 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp`;
+DELIMITER |
+CREATE PROCEDURE `SP_reporte_recarga_tpp`(in codpaquete int)
+BEGIN
+	select CASE b.documentos_fisico_original
+     WHEN 'Primero' THEN b.numero_cedula
+     WHEN 'Segundo' THEN b.numero_identificacion
+     WHEN 'Ninguno' THEN b.numero_cedula
+     ELSE b.numero_cedula
+	END AS 'numero_documento', b.primer_apellido as apepat, b.segundo_apellido as apemat, 
+    concat(b.primer_nombre, ' ', b.segundo_nombre) as nombres, null as Numero_de_Tarjeta,
+    bono_familiar(fpd.id_beneficiario) as monto, null as Numero_de_Operacion
+	from finanzas_paquete as fp inner join finanzas_paquete_detalle as fpd on fp.id_paquete = fpd.id_paquete
+	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
+	where fpd.id_paquete = codpaquete;
+END |
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
 DELIMITER |
