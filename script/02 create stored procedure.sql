@@ -515,6 +515,7 @@ BEGIN
 	inner join beneficiario b on fpd.id_beneficiario = b.id_beneficiario
 	where fpd.id_paquete = codpaquete;
 END |
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `SP_reporte_recarga_tpp_mas_bono`;
 DELIMITER |
