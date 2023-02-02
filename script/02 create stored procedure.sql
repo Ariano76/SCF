@@ -142,6 +142,17 @@ CREATE VIEW `vista_finanzas_dea` AS
     FROM finanzas_dea;
 DELIMITER ;
 
+drop view IF EXISTS vista_finanzas_sof;
+CREATE VIEW `vista_finanzas_sof` AS
+	SELECT id_sof, cod_sof, descripcion
+    FROM finanzas_sof;
+DELIMITER ;
+
+drop view IF EXISTS vista_finanzas_costc;
+CREATE VIEW `vista_finanzas_costc` AS
+	SELECT id_costc, cod_costc, descripcion
+    FROM finanzas_costc;
+DELIMITER ;
 
 SELECT @i := @i + 1 as contador, vf.mes, vf.anio, vf.total_registro
 		FROM vista_finanzas_reporte_jetperu as vf cross join (select @i := 0) r;
