@@ -29,6 +29,8 @@ DROP TABLE if exists finanzas_estado_financiero;
 DROP TABLE if exists finanzas_stage_ppto;
 DROP TABLE if exists finanzas_stage_gasto;
 DROP TABLE if exists finanzas_dea;
+DROP TABLE if exists finanzas_costc;
+DROP TABLE if exists finanzas_sof;
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
@@ -259,29 +261,19 @@ CREATE TABLE finanzas_dea
     PRIMARY KEY (id_dea)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
-/*
-CREATE TABLE finanzas_stage_gastos
-(	id_stage_gasto	INTEGER NOT NULL AUTO_INCREMENT,
-	account_f		VARCHAR(255) NULL,
-    costc			VARCHAR(255) NULL,
-    project			VARCHAR(255) NULL,
-    drc_description	VARCHAR(255) NULL,
-    dea				VARCHAR(255) NULL,
-    dea_t			VARCHAR(255) NULL,
-    period			VARCHAR(255) NULL,
-    transaction_date		VARCHAR(255) NULL,
-    transaction_currency	VARCHAR(255) NULL,
-    amount_in_transaction_currency	VARCHAR(255) NULL,
-    amount_in_usd		VARCHAR(255) NULL,
-    donor_currency		VARCHAR(255) NULL,
-    donor_cur_amount	VARCHAR(255) NULL,
-    trans_no			VARCHAR(255) NULL,
-    analysis_type		VARCHAR(255) NULL,
-    analysis			VARCHAR(255) NULL,
-    transaction_desc	VARCHAR(255) NULL,
-    PRIMARY KEY (id_stage_gasto)
+CREATE TABLE finanzas_sof
+(	id_sof		INTEGER NOT NULL AUTO_INCREMENT,
+	cod_sof		VARCHAR(10) NOT NULL,
+    descripcion	VARCHAR(255) NULL
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
-*/
+ALTER TABLE finanzas_sof ADD CONSTRAINT unique_id_sof UNIQUE (id_sof);
+
+CREATE TABLE finanzas_costc
+(	id_costc	INTEGER NOT NULL AUTO_INCREMENT,
+	cod_costc	VARCHAR(8) NOT NULL,
+    descripcion	VARCHAR(255) NULL
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+ALTER TABLE finanzas_costc ADD CONSTRAINT unique_id_costc UNIQUE (id_costc);
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
@@ -362,6 +354,13 @@ insert into finanzas_dea (dea, descripcion) values ('1051151','Country Support S
 ('N84008179','Country Shared Costs - National salaries'),('P84008179','Country Shared Costs - Premise costs'),
 ('T84008179','Country Shared Costs - Travel & Lodging'),
 ('V84008179','Country Shared Costs – Vehicle & transport costs');
+
+insert into finanzas_sof (id_sof, descripcion) 
+values ('84008179','BHA Migrantes'),('84008177','BPRM'),('99400764','GIZ'),('84006612','GIRD MRNO BHA'),('84008198
+','CHLOE'),('84008349','Más Diversidad (ECW)'),('99701132','Humanitarian Fund');
+
+insert into finanzas_costc (id_costc, descripcion) 
+values ('60400','Country Office Peru'),('60412','Field Office Huancavelica'),('60411','Peru Programme costs'),('60405','Field Office Lambayeque'),('60406','Field Office Lima NorEste'),('60407','Field Office Arequipa'),('60408','Field Office Piura'),('60410','Field Office Libertad'),('60413','Field Office Lima Norte GRD');
 
 
 /***********************************************
