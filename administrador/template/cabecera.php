@@ -230,6 +230,9 @@ document.addEventListener("DOMContentLoaded", function(){
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/dea.php" ?>">Maestro DEA</a>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_dea.php" ?>">Cargar DEA masivos</a>
 								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/sof.php" ?>">Maestro de Proyectos</a>
+								<a class="dropdown-item" href="<?php echo $url."/gerencia/costc.php" ?>">Maestro Centro de Costo</a>
+								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_ppto.php" ?>">Cargar datos financieros PPTO</a>
 								<a class="dropdown-item" href="<?php echo $url."/gerencia/uploadfile_gastos.php" ?>">Cargar datos financieros Gastos</a>
 								<div class="dropdown-divider"></div>

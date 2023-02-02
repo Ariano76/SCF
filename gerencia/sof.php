@@ -9,9 +9,17 @@ include("../administrador/config/connection.php");
     width: 100%;
     margin-bottom: 20px;
   }
+
+  input-error {
+  outline: 1px solid red;
+  }
+  
+  input:invalid {
+    border: 3px solid red;
+  }
 </style>
 
-<h1 class="display-8">MAESTRO DEA</h1> 
+<h1 class="display-8">MAESTRO DE PROYECTOS (SOF)</h1> 
 <div class="container">
 
 </div>
@@ -24,7 +32,7 @@ include("../administrador/config/connection.php");
     <thead class="text-center">
       <tr>
         <th>Código</th>
-        <th>Código DEA</th>
+        <th>Código SOF</th>
         <th>Descripción</th>
         <th>Acción</th>
       </tr>
@@ -45,7 +53,7 @@ include("../administrador/config/connection.php");
       'paging': 'true',
       'order': [],
       'ajax': {
-        'url': 'dea_fetch_data.php',
+        'url': 'sof_fetch_data.php',
         'type': 'post',
       },
       "aoColumnDefs": [{
@@ -57,14 +65,14 @@ include("../administrador/config/connection.php");
   });
   $(document).on('submit', '#addUser', function(e) {
     e.preventDefault();
-    var dea = $('#adddeaField').val();
+    var sof = $('#addsofField').val();
     var descripcion = $('#adddescripcionField').val();
-    if (dea != '' && descripcion != '') {
+    if (sof != '' && descripcion != '') {
       $.ajax({
-        url: "dea_add.php",
+        url: "sof_add.php",
         type: "post",
         data: {
-          dea: dea,
+          sof: sof,
           descripcion: descripcion,
         },
         success: function(data) {
@@ -85,16 +93,16 @@ include("../administrador/config/connection.php");
   });  
   $(document).on('submit', '#updateUser', function(e) {
     e.preventDefault();
-    var dea = $('#deaField').val();
+    var sof = $('#sofField').val();
     var descripcion = $('#descripcionField').val();      
     var trid = $('#trid').val();
     var id = $('#id').val();
-    if (dea != '') {
+    if (sof != '') {
       $.ajax({
-        url: "dea_update.php",
+        url: "sof_update.php",
         type: "post",
         data: {
-          dea: dea,
+          sof: sof,
           descripcion: descripcion,
           id: id
         },
@@ -106,7 +114,7 @@ include("../administrador/config/connection.php");
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a> </td>';
             var row = table.row("[id='" + trid + "']");
 
-            row.row("[id='" + trid + "']").data([id, dea, descripcion, button]);
+            row.row("[id='" + trid + "']").data([id, sof, descripcion, button]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -125,14 +133,14 @@ include("../administrador/config/connection.php");
       $('#exampleModal').modal('show');
 
       $.ajax({
-        url: "dea_get_single.php",
+        url: "sof_get_single.php",
         data: {
           id: id
         },
         type: 'post',
         success: function(data) {
           var json = JSON.parse(data);
-          $('#deaField').val(json.dea);
+          $('#sofField').val(json.cod_sof);
           $('#descripcionField').val(json.descripcion);
 
           $('#id').val(id);
@@ -141,13 +149,14 @@ include("../administrador/config/connection.php");
       })
     });
 
+
   </script>
-  <!-- Update DEA Modal -->
+  <!-- Update sof Modal -->
   <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR DEA</h5>
+          <h5 class="modal-title" id="exampleModalLabel">ACTUALIZAR PROYECTO (SOF)</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -156,13 +165,13 @@ include("../administrador/config/connection.php");
             <input type="hidden" name="trid" id="trid" value="">
 
             <div class="mb-3 row">
-              <label for="deaField" class="col-md-3 form-label">Código DEA</label>
+              <label for="sofField" class="col-md-3 form-label">Código SOF</label>
               <div class="col-md-8">
-                <input type="text" class="form-control" id="deaField" name="City" maxlength="20">
+                <input type="text" class="form-control" id="sofField" name="sofField" maxlength="10" pattern="[0-9]+">
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="descripcionField" class="col-md-3 form-label">Descripción DEA</label>
+              <label for="descripcionField" class="col-md-3 form-label">Descripción Proyecto</label>
               <div class="md-form amber-textarea active-amber-textarea col-md-8">
                 <textarea class="form-control rounded-0" name="text" id="descripcionField" rows="4" cols="45" maxlength="255" ></textarea>
               </div>
@@ -184,19 +193,19 @@ include("../administrador/config/connection.php");
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">AGREGAR NUEVO DEA</h5>
+          <h5 class="modal-title" id="exampleModalLabel">AGREGAR NUEVO PROYECTO (SOF)</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="addUser" action="">
             <div class="mb-3 row">
-              <label for="adddeaField" class="col-md-3 form-label">Código DEA</label>
+              <label for="addsofField" class="col-md-3 form-label">Código SOF</label>
               <div class="col-md-9">  
-                <input type="text" class="form-control" id="adddeaField" name="City" maxlength="20">
+                <input type="text" class="form-control" id="addsofField" name="addsofField" maxlength="10" pattern="[0-9]+">
               </div>
             </div>
             <div class="mb-3 row">
-              <label for="adddescripcionField" class="col-md-3 form-label">Descripción DEA</label>
+              <label for="adddescripcionField" class="col-md-3 form-label">Descripción Proyecto</label>
               <div class="col-md-9">
                 <textarea class="form-control rounded-0" name="text" id="adddescripcionField" rows="4" cols="45" maxlength="255" autocomplete="off"></textarea>
               </div>

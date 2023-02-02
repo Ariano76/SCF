@@ -264,16 +264,18 @@ CREATE TABLE finanzas_dea
 CREATE TABLE finanzas_sof
 (	id_sof		INTEGER NOT NULL AUTO_INCREMENT,
 	cod_sof		VARCHAR(10) NOT NULL,
-    descripcion	VARCHAR(255) NULL
+    descripcion	VARCHAR(255) NULL,
+    PRIMARY KEY (id_sof)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
-ALTER TABLE finanzas_sof ADD CONSTRAINT unique_id_sof UNIQUE (id_sof);
+ALTER TABLE finanzas_sof ADD CONSTRAINT unique_cod_sof UNIQUE (cod_sof);
 
 CREATE TABLE finanzas_costc
 (	id_costc	INTEGER NOT NULL AUTO_INCREMENT,
 	cod_costc	VARCHAR(8) NOT NULL,
-    descripcion	VARCHAR(255) NULL
+    descripcion	VARCHAR(255) NULL,
+	PRIMARY KEY (id_costc)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
-ALTER TABLE finanzas_costc ADD CONSTRAINT unique_id_costc UNIQUE (id_costc);
+ALTER TABLE finanzas_costc ADD CONSTRAINT unique_cod_costc UNIQUE (cod_costc);
 
 /*********************************
 -- CREACION DE LLAVES FORANEAS 
@@ -355,11 +357,11 @@ insert into finanzas_dea (dea, descripcion) values ('1051151','Country Support S
 ('T84008179','Country Shared Costs - Travel & Lodging'),
 ('V84008179','Country Shared Costs – Vehicle & transport costs');
 
-insert into finanzas_sof (id_sof, descripcion) 
+insert into finanzas_sof (cod_sof, descripcion) 
 values ('84008179','BHA Migrantes'),('84008177','BPRM'),('99400764','GIZ'),('84006612','GIRD MRNO BHA'),('84008198
 ','CHLOE'),('84008349','Más Diversidad (ECW)'),('99701132','Humanitarian Fund');
 
-insert into finanzas_costc (id_costc, descripcion) 
+insert into finanzas_costc (cod_costc, descripcion) 
 values ('60400','Country Office Peru'),('60412','Field Office Huancavelica'),('60411','Peru Programme costs'),('60405','Field Office Lambayeque'),('60406','Field Office Lima NorEste'),('60407','Field Office Arequipa'),('60408','Field Office Piura'),('60410','Field Office Libertad'),('60413','Field Office Lima Norte GRD');
 
 
