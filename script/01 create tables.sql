@@ -31,6 +31,7 @@ DROP TABLE if exists finanzas_stage_gasto;
 DROP TABLE if exists finanzas_dea;
 DROP TABLE if exists finanzas_costc;
 DROP TABLE if exists finanzas_sof;
+DROP TABLE if exists finanzas_stage_ppto_sof
 /*********************************
 -- CREACION DE TABLAS 
 *********************************/
@@ -45,12 +46,14 @@ CREATE TABLE finanzas_periodos (
 ALTER TABLE finanzas_periodos ADD CONSTRAINT const_periodos UNIQUE (mes,anio);
 
 
+/*
 CREATE TRIGGER asigna_periodo BEFORE INSERT ON finanzas_periodos
 FOR EACH ROW 
 BEGIN
   SET NEW.periodo = new.mes;
 END;
-        
+*/
+
 CREATE TABLE finanzas_paquete (
 	id_paquete		INTEGER NOT NULL AUTO_INCREMENT,
 	fecha			DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -242,6 +245,18 @@ CREATE TABLE finanzas_stage_ppto
     periodo			VARCHAR(50) NULL,
     monto			VARCHAR(50) NULL,
     PRIMARY KEY (id_stage_ppto)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
+
+CREATE TABLE finanzas_stage_ppto_sof
+(	id_stage_ppto_sof	INTEGER NOT NULL AUTO_INCREMENT,
+	ccent			VARCHAR(50) NULL,
+    sof				VARCHAR(50) NULL,
+    dea				VARCHAR(50) NULL,
+    anio			VARCHAR(50) NULL,
+    mes				VARCHAR(50) NULL,
+    periodo			VARCHAR(50) NULL,
+    monto			VARCHAR(50) NULL,
+    PRIMARY KEY (id_stage_ppto_sof)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;  
 
 CREATE TABLE finanzas_stage_gasto

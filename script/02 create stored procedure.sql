@@ -156,6 +156,8 @@ DELIMITER ;
 
 SELECT @i := @i + 1 as contador, vf.mes, vf.anio, vf.total_registro
 		FROM vista_finanzas_reporte_jetperu as vf cross join (select @i := 0) r;
+
+
 /*********************************
 -- CREAR STORED PROCEDURE
 *********************************/
