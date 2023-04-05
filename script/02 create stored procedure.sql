@@ -375,6 +375,22 @@ BEGIN
 END |
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `SP_limpiar_stage_ppto_sof`;
+DELIMITER |
+CREATE PROCEDURE `SP_limpiar_stage_ppto_sof`(OUT success INT)
+BEGIN
+	DECLARE exit handler for sqlexception
+	BEGIN
+		SET success = 0; -- ERROR
+	ROLLBACK;
+	END;
+	START TRANSACTION;
+		delete from finanzas_stage_ppto_sof ;        
+        SET success = 1;
+    COMMIT;
+END |
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `SP_limpiar_stage_gastos`;
 DELIMITER |
 CREATE PROCEDURE `SP_limpiar_stage_gastos`(OUT success INT)

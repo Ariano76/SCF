@@ -38,7 +38,7 @@ if (isset($_POST["import"])) {
     $spreadSheetAry = $excelSheet->toArray();
     $sheetCount = count($spreadSheetAry);
 
-    $insertId = $db_1->ejecutarstoredprocedure("SP_limpiar_stage_ppto");
+    $insertId = $db_1->ejecutarstoredprocedure("SP_limpiar_stage_ppto_sof");
     $conta=0;
     //for ($i = 0; $i <= $sheetCount; $i ++) {
     for ($i = 1; $i < $sheetCount; $i ++) {
