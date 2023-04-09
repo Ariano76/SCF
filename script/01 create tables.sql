@@ -377,7 +377,9 @@ values ('84008179','BHA Migrantes'),('84008177','BPRM'),('99400764','GIZ'),('840
 ','CHLOE'),('84008349','Más Diversidad (ECW)'),('99701132','Humanitarian Fund');
 
 insert into finanzas_costc (cod_costc, descripcion) 
-values ('60400','Country Office Peru'),('60412','Field Office Huancavelica'),('60411','Peru Programme costs'),('60405','Field Office Lambayeque'),('60406','Field Office Lima NorEste'),('60407','Field Office Arequipa'),('60408','Field Office Piura'),('60410','Field Office Libertad'),('60413','Field Office Lima Norte GRD');
+values ('60400','Country Office Peru'),('60412','Field Office Huancavelica'),('60411','Peru Programme costs'),
+('60405','Field Office Lambayeque'),('60406','Field Office Lima NorEste'),('60407','Field Office Arequipa'),
+('60408','Field Office Piura'),('60410','Field Office Libertad'),('60413','Field Office Lima Norte GRD');
 
 
 /***********************************************
